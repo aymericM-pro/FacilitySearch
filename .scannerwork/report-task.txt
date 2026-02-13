@@ -1,0 +1,7 @@
+organization=aymericm-pro
+projectKey=FacilitySearch
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.81246
+dashboardUrl=https://sonarcloud.io/dashboard?id=FacilitySearch
+ceTaskId=AZxW05o_19x-RBLlOEJS
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZxW05o_19x-RBLlOEJS
