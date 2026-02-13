@@ -1,30 +1,37 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts" setup>
+import { RouterView } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import fsLink from '@/core/design-system/fsLink.component.vue';
+
+const { t } = useI18n();
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
-</template>
+    <div class="min-h-screen bg-slate-50">
+        <header class="bg-indigo-100 border-b border-indigo-200">
+            <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                <h1 class="font-semibold text-indigo-700 text-lg tracking-tight">
+                    JobSearch
+                </h1>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+                <nav class="flex gap-8 text-indigo-600">
+                    <fsLink to="/">
+                        {{ t('navigation.home') }}
+                    </fsLink>
+
+                    <fsLink to="/trigger">
+                        {{ t('navigation.trigger') }}
+                    </fsLink>
+
+                    <fsLink to="/jobs">
+                        {{ t('navigation.jobs') }}
+                    </fsLink>
+                </nav>
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto px-6 py-10">
+            <RouterView />
+        </main>
+    </div>
+</template>

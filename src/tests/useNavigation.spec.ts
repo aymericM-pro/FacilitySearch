@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useNavigation } from '@/core/composables/navigation.composable';
 
-// mock vue-router
 const pushMock = vi.fn();
 
 vi.mock('vue-router', () => ({
