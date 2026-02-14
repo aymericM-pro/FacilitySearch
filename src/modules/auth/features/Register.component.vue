@@ -6,6 +6,7 @@ import { AppRoute } from '@/router';
 import { useNavigation } from '@/core/composables/navigation.composable.ts';
 import fsInput from '@/core/design-system/fsInput.component.vue';
 import fsButton from '@/core/design-system/fsButton.component.vue';
+import { useUserStore } from '@/core/composables/user.store.ts';
 
 const { register } = useAuth();
 const { goTo } = useNavigation();
@@ -19,6 +20,7 @@ const form = reactive({
 
 const errors = ref<Record<string, string>>({});
 const loading = ref(false);
+const userStore = useUserStore();
 
 const submit = async () => {
     errors.value = {};
@@ -33,17 +35,23 @@ const submit = async () => {
     }
 
     loading.value = true;
+
     try {
-        await register({
+        const response = await register({
             email: form.email,
             password: form.password,
+            pseudo: form.pseudo,
         });
 
-        goTo(AppRoute.JOBS); // redirection
+        userStore.setUser(form.pseudo, response.token);
+
+        goTo(AppRoute.JOBS);
+
     } finally {
         loading.value = false;
     }
 };
+
 </script>
 
 <template>

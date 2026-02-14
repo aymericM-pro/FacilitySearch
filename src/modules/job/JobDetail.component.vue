@@ -1,135 +1,81 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import axios from 'axios';
-import { useRoute } from 'vue-router';
-import fsLink from '@/core/design-system/fsLink.component.vue';
+import fsBar from '@/core/components/fsBar.component.vue';
 import fsButton from '@/core/design-system/fsButton.component.vue';
 import { agorapulseJob } from '@/modules/job/datas/agorapulse.job';
 
-const route = useRoute();
-const jobId = route.params.id as string;
-
 const job = agorapulseJob;
 
-const showPdf = ref(false);
-const pdfUrl = ref<string | null>(null);
 const loading = ref(false);
 const error = ref<string | null>(null);
+const showSidebar = ref(false);
+const cvs = ref<any[]>([]);
 
-const generateCv = async () => {
+const loadUserCvsForOffer = async () => {
     loading.value = true;
     error.value = null;
 
     try {
-        const { data } = await axios.post(
-            'http://localhost:8080/api/curriculum/trigger',
+        const token = localStorage.getItem('token');
+
+        const { data } = await axios.get(
+            'http://localhost:8080/api/curriculum/by-offer',
             {
-                jobTitle: job.title,
-                company: job.company,
+                params: {
+                    jobTitle: job.title,
+                    company: job.company,
+                },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             },
         );
 
-        pdfUrl.value = data.url;
-        showPdf.value = true;
-    } catch (e) {
-        error.value = 'Generation failed';
+        cvs.value = data;
+        showSidebar.value = true;
+
+    } catch {
+        error.value = 'Failed to load CVs';
     } finally {
         loading.value = false;
     }
 };
 
-const downloadFromBucket = async () => {
-    loading.value = true;
-
-    try {
-        const { data } = await axios.get(
-            `http://localhost:8080/api/curriculum/download/test`,
-        );
-
-        pdfUrl.value = data.url;
-        showPdf.value = true;
-    } finally {
-        loading.value = false;
-    }
-};
-const downloadCv = () => {
-    if (!pdfUrl.value) return;
-    window.open(pdfUrl.value, '_blank');
+const openPdf = (url: string) => {
+    window.open(url, '_blank');
 };
 
-const closePdf = () => {
-    showPdf.value = false;
+const closeSidebar = () => {
+    showSidebar.value = false;
 };
 </script>
 
 <template>
     <div class="max-w-6xl mx-auto space-y-10">
-        <!-- HEADER -->
-        <div class="space-y-6">
-            <fsLink to="/jobs">
-                ← Back to jobs
-            </fsLink>
 
-            <div class="flex items-start justify-between">
-                <!-- Left -->
-                <div class="flex items-start gap-5">
-                    <img
-                        :src="job.logo"
-                        class="w-16 h-16 rounded-xl border"
-                    />
+        <!-- HEADER  -->
+        <fsBar
+            :description="`${job.company} · ${job.location}`"
+            :logo="job.logo"
+            :showBack="true"
+            :title="job.title"
+            backTo="/jobs"
+        >
+            <template #actions>
+                <fsButton
+                    :disabled="loading"
+                    variant="primary"
+                    @click="loadUserCvsForOffer"
+                >
+                    {{ loading ? 'Loading...' : 'View My CVs' }}
+                </fsButton>
+            </template>
+        </fsBar>
 
-                    <div>
-                        <h1 class="text-3xl font-semibold text-slate-800">
-                            {{ job.title }}
-                        </h1>
-
-                        <p class="text-slate-600 mt-2">
-                            {{ job.company }} · {{ job.location }}
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Right Buttons -->
-                <div class="flex items-center gap-4 min-w-[320px] justify-end">
-                    <fsButton
-                        class="bg-slate-100 hover:bg-slate-200 text-slate-800"
-                        variant="secondary"
-                    >
-                        Apply
-                    </fsButton>
-
-                    <fsButton
-                        :disabled="loading"
-                        variant="primary"
-                        @click="generateCv"
-                    >
-                        {{ loading ? 'Generating...' : 'Generate Tailored CV' }}
-                    </fsButton>
-
-                    <fsButton
-                        v-if="pdfUrl"
-                        variant="secondary"
-                        @click="downloadCv"
-                    >
-                        Download
-                    </fsButton>
-
-                    <fsButton
-                        variant="secondary"
-                        @click="downloadFromBucket"
-                    >
-                        Load from bucket
-                    </fsButton>
-                </div>
-            </div>
-
-            <p
-                v-if="error"
-                class="text-red-600"
-            >
-                {{ error }}
-            </p>
-        </div>
+        <p v-if="error" class="text-red-600">
+            {{ error }}
+        </p>
 
         <!-- DESCRIPTION -->
         <div class="bg-white p-10 rounded-2xl shadow-sm border border-slate-200">
@@ -137,43 +83,66 @@ const closePdf = () => {
                 {{ job.description }}
             </div>
         </div>
+
     </div>
 
-    <!-- PDF DIALOG -->
-    <div
-        v-if="showPdf && pdfUrl"
-        class="fixed inset-0 z-50 flex items-center justify-center"
-    >
+    <!-- SIDEBAR -->
+    <div class="fixed inset-0 z-50 pointer-events-none">
+
         <!-- Overlay -->
         <div
-            class="absolute inset-0 bg-black/50"
-            @click="closePdf"
+            v-if="showSidebar"
+            class="absolute inset-0 bg-black/40 transition-opacity duration-300 pointer-events-auto"
+            @click="closeSidebar"
         />
 
-        <!-- Modal -->
+        <!-- Panel -->
         <div
-            class="relative bg-white w-[90vw] h-[90vh] rounded-2xl shadow-xl overflow-hidden flex flex-col"
+            :class="showSidebar ? 'translate-x-0' : 'translate-x-full'"
+            class="absolute right-0 top-0 h-full w-[420px] bg-white shadow-2xl border-l
+                   transform transition-transform duration-300 ease-in-out pointer-events-auto"
         >
             <!-- Header -->
-            <div class="flex items-center justify-between p-4 border-b">
-                <h2 class="font-semibold text-slate-800">
-                    CV Preview
+            <div class="p-6 border-b flex justify-between items-center">
+                <h2 class="text-lg font-semibold">
+                    My CVs
                 </h2>
 
                 <button
                     class="text-slate-500 hover:text-slate-800"
-                    @click="closePdf"
+                    @click="closeSidebar"
                 >
                     ✕
                 </button>
             </div>
 
-            <!-- PDF -->
-            <iframe
-                :src="pdfUrl"
-                class="flex-1 w-full"
-                title="CV Preview"
-            />
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-4">
+
+                <div v-if="!cvs.length" class="text-slate-500">
+                    No CV generated yet.
+                </div>
+
+                <div
+                    v-for="cv in cvs"
+                    :key="cv.id"
+                    class="p-4 border rounded-xl flex justify-between items-center"
+                >
+                    <div>
+                        <p class="text-sm font-medium text-slate-800">
+                            {{ cv.createdAt }}
+                        </p>
+                    </div>
+
+                    <fsButton
+                        size="sm"
+                        variant="secondary"
+                        @click="openPdf(cv.url)"
+                    >
+                        Open
+                    </fsButton>
+                </div>
+            </div>
         </div>
     </div>
 </template>

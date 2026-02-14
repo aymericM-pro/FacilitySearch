@@ -3,12 +3,14 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import fsButton from '@/core/design-system/fsButton.component.vue';
 import fsInput from '@/core/design-system/fsInput.component.vue';
+import { useUserStore } from '@/core/composables/user.store.ts';
 
 const { t } = useI18n();
 
 const jobTitle = ref('');
 const company = ref('');
 const loading = ref(false);
+const userStore = useUserStore();
 
 const trigger = async () => {
     console.log('Trigger clicked');
@@ -22,12 +24,16 @@ const trigger = async () => {
     try {
         const res = await fetch('http://localhost:8080/api/curriculum/trigger', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userStore.token}`,
+            },
             body: JSON.stringify({
                 jobTitle: jobTitle.value,
                 company: company.value,
             }),
         });
+
 
         console.log('Backend response status:', res.status);
 

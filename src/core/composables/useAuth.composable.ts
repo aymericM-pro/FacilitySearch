@@ -15,14 +15,16 @@ export function useAuth() {
         localStorage.setItem('token', data.token);
     };
 
-    const register = async (payload: { email: string; password: string }) => {
+    const register = async (payload: { email: string; pseudo: string; password: string }) => {
         const { data } = await axios.post(
             'http://localhost:8080/api/auth/register',
             payload,
         );
-
+        
         token.value = data.token;
         localStorage.setItem('token', data.token);
+
+        return data;
     };
 
     const logout = () => {
