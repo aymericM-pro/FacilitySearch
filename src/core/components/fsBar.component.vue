@@ -29,6 +29,7 @@ defineProps<{
                 <img
                     v-if="logo"
                     :src="logo"
+                    alt="Logo"
                     class="w-14 h-14 rounded-xl border"
                 />
 

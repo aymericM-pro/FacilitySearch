@@ -4,6 +4,7 @@ const props = defineProps<{
     label?: string
     error?: string | null
     placeholder?: string
+    type?: string
 }>();
 
 const emit = defineEmits(['update:modelValue']);
@@ -20,6 +21,7 @@ const emit = defineEmits(['update:modelValue']);
 
             <input
                 :placeholder="placeholder"
+                :type="type ?? 'text'"
                 :value="modelValue"
                 class="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"

@@ -29,6 +29,7 @@ const handleCsvImport = (event: Event) => {
     console.log('CSV file selected:', file);
 };
 </script>
+
 <template>
     <div class="max-w-6xl mx-auto space-y-8">
 
