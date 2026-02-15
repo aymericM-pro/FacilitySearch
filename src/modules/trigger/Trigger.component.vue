@@ -1,81 +1,157 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import fsButton from '@/core/design-system/fsButton.component.vue';
-import fsInput from '@/core/design-system/fsInput.component.vue';
-import { useUserStore } from '@/core/composables/user.store.ts';
+import axios from 'axios';
+import { useUserStore } from '@/core/composables/user.store';
 
-const { t } = useI18n();
-
-const jobTitle = ref('');
-const company = ref('');
-const loading = ref(false);
 const userStore = useUserStore();
 
-const trigger = async () => {
-    console.log('Trigger clicked');
-    console.log('Payload:', {
-        jobTitle: jobTitle.value,
-        company: company.value,
-    });
+const jobTitle = ref('');
+const description = ref('');
+const previewText = ref('');
+
+const showModal = ref(false);
+const loading = ref(false);
+const generating = ref(false);
+
+const generatePreview = async () => {
+    if (!jobTitle.value || !description.value) return;
 
     loading.value = true;
 
     try {
-        const res = await fetch('http://localhost:8080/api/curriculum/trigger', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${userStore.token}`,
-            },
-            body: JSON.stringify({
+        const { data } = await axios.post(
+            'http://localhost:8080/api/ai/target-line',
+            {
                 jobTitle: jobTitle.value,
-                company: company.value,
-            }),
-        });
+                description: description.value,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`,
+                },
+            },
+        );
 
+        previewText.value = data.targetLine;
+        showModal.value = true;
 
-        console.log('Backend response status:', res.status);
-
-        if (!res.ok) {
-            const text = await res.text();
-            console.error('Backend error:', text);
-        } else {
-            console.log('Backend OK');
-        }
     } catch (e) {
-        console.error('Frontend error:', e);
+        console.error(e);
     } finally {
         loading.value = false;
+    }
+};
+
+const confirmGeneration = async () => {
+    generating.value = true;
+
+    try {
+        await axios.post(
+            'http://localhost:8080/api/curriculum/trigger',
+            {
+                jobTitle: jobTitle.value,
+                targetLine: previewText.value,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`,
+                },
+            },
+        );
+
+        showModal.value = false;
+
+    } catch (e) {
+        console.error(e);
+    } finally {
+        generating.value = false;
     }
 };
 </script>
 
 <template>
-    <div class="max-w-md mx-auto space-y-4">
+    <div class="max-w-2xl mx-auto space-y-6">
+
         <h1 class="text-2xl font-semibold">
-            {{ t('trigger.title') }}
+            Déclencher un job CV
         </h1>
 
-        <fsInput
-            v-model="jobTitle"
-            :label="t('trigger.fields.jobTitle')"
-            :placeholder="t('trigger.placeholders.jobTitle')"
-        />
+        <!-- INPUT TITRE -->
+        <div class="space-y-3">
+            <label class="block text-base font-semibold text-slate-800">
+                Title
+            </label>
 
-        <fsInput
-            v-model="company"
-            :label="t('trigger.fields.company')"
-            :placeholder="t('trigger.placeholders.company')"
-        />
+            <input
+                v-model="jobTitle"
+                class="w-full p-4 text-sm border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                placeholder="Ex: Développeur Java / Vue"
+                type="text"
+            />
+        </div>
 
-        <fsButton
+        <!-- TEXTAREA DESCRIPTION -->
+        <div class="space-y-3">
+            <label class="block text-base font-semibold text-slate-800">
+                Description
+            </label>
+
+            <textarea
+                v-model="description"
+                class="w-full p-4 text-sm border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                placeholder="Paste the full job description here..."
+                rows="8"
+            />
+        </div>
+
+
+        <!-- BUTTON -->
+        <button
             :disabled="loading"
-            full
-            @click="trigger"
+            class="w-full py-3 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+            @click="generatePreview"
         >
-            {{ t('common.actions.trigger') }}
-        </fsButton>
+            {{ loading ? 'Generating...' : 'Generate Preview' }}
+        </button>
 
+    </div>
+
+    <!-- MODAL -->
+    <div
+        v-if="showModal"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+    >
+        <div class="bg-white w-full max-w-xl rounded-2xl p-6 space-y-6">
+
+            <!-- TITLE -->
+            <h2 class="text-xl font-semibold">
+                Preview CV Target Line
+            </h2>
+
+            <!-- CONTENT -->
+            <div class="p-4 bg-slate-100 rounded-xl text-sm space-y-2">
+                <p class="font-medium">{{ jobTitle }}</p>
+                <p>{{ previewText }}</p>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="flex justify-end gap-3 pt-4 border-t">
+                <button
+                    class="px-4 py-2 text-sm text-slate-600 hover:text-slate-800"
+                    @click="showModal = false"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    :disabled="generating"
+                    class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                    @click="confirmGeneration"
+                >
+                    {{ generating ? 'Generating CV...' : 'Confirm & Generate CV' }}
+                </button>
+            </div>
+
+        </div>
     </div>
 </template>
