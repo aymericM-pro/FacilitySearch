@@ -5,6 +5,8 @@ export const AppRoute = {
     TRIGGER: 'trigger',
     JOBS: 'jobs',
     JOB_DETAIL: 'job-detail',
+    COMPANIES: 'companies',
+    COMPANY_DETAIL: 'company-detail',
     LOGIN: 'login',
     REGISTER: 'register',
 } as const;
@@ -34,6 +36,16 @@ const router = createRouter({
             name: AppRoute.TRIGGER,
             path: '/trigger',
             component: () => import('@/modules/trigger/Trigger.component.vue'),
+        },
+        {
+            name: AppRoute.COMPANIES,
+            path: '/companies',
+            component: () => import('@/modules/companies/CompaniesList.component.vue'),
+        },
+        {
+            name: AppRoute.COMPANY_DETAIL,
+            path: '/companies/:id',
+            component: () => import('@/modules/company/CompanyDetail.component.vue'),
         },
         {
             path: '/login',

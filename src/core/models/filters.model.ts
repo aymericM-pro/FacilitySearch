@@ -1,6 +1,6 @@
 import type { Component } from 'vue';
 
-export interface Filters {
+export interface JobFilters {
     remote: boolean | null;
     contractType: string | null;
     skills: string[];
@@ -8,14 +8,19 @@ export interface Filters {
     salary: number | null;
 }
 
+export interface CompanyFilters {
+    industry: string[];
+    companyType: string[];
+    city: string[];
+}
 
-type FilterConfigItem<K extends keyof Filters> = {
+type FilterConfigItem<T, K extends keyof T> = {
     key: K
     label: string
     component: Component
     props?: () => Partial<Record<string, unknown>>
 }
 
-export type FilterConfig = {
-    [K in keyof Filters]: FilterConfigItem<K>
-}[keyof Filters]
+export type FilterConfig<T> = {
+    [K in keyof T]: FilterConfigItem<T, K>
+}[keyof T]

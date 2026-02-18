@@ -1,8 +1,7 @@
-// composables/useJobLoader.ts
 import { ref } from 'vue';
-import axios from 'axios';
 import type { Filters } from '@/modules/jobs/models/Filters.model';
 import type { JobOfferResponse } from '@/modules/jobs/models/JobOffer.model';
+import api from '@/core/axios/axios.ts';
 
 export function useJobLoader() {
     const jobs = ref<JobOfferResponse[]>([]);
@@ -19,8 +18,6 @@ export function useJobLoader() {
         error.value = null;
 
         try {
-            const token = localStorage.getItem('token');
-
             const params: Record<string, any> = {
                 page: page - 1,
                 size,
@@ -41,18 +38,14 @@ export function useJobLoader() {
                 params[key] = value;
             });
 
-            const { data } = await axios.get(
-                'http://localhost:8080/api/job-offers',
-                {
-                    params,
-                    headers: { Authorization: `Bearer ${token}` },
-                },
-            );
+            const { data } = await api.get('/job-offers', { params });
 
             jobs.value = data.content;
             totalItems.value = data.totalElements;
-        } catch {
-            error.value = 'Failed to load jobs';
+
+        } catch (err: any) {
+            error.value =
+                err?.message || 'Failed to load jobs';
         } finally {
             loading.value = false;
         }
@@ -60,4 +53,3 @@ export function useJobLoader() {
 
     return { jobs, totalItems, loading, error, loadJobs };
 }
-

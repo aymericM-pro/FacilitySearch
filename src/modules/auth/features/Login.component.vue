@@ -31,6 +31,7 @@ const submit = async () => {
     }
 
     loading.value = true;
+
     try {
         await login({
             email: form.email,
@@ -38,6 +39,9 @@ const submit = async () => {
         });
 
         goTo(AppRoute.JOBS);
+
+    } catch (e: any) {
+        errors.value.global = e.message || 'Login failed';
     } finally {
         loading.value = false;
     }
@@ -48,29 +52,41 @@ const submit = async () => {
     <div class="max-w-md mx-auto space-y-6">
         <h1 class="text-2xl font-semibold">Login</h1>
 
-        <fsInput
-            v-model="form.email"
-            :error="errors.email"
-            label="Email"
-            placeholder="Email"
-        />
+        <form class="space-y-6" @submit.prevent="submit">
 
-        <fsInput
-            v-model="form.password"
-            :error="errors.password"
-            label="Password"
-            placeholder="Password"
-            type="password"
-        />
+            <fsInput
+                v-model="form.email"
+                :error="errors.email"
+                label="Email"
+                placeholder="Email"
+                type="email"
+            />
 
-        <fsButton
-            :disabled="loading"
-            full
-            size="md"
-            variant="primary"
-            @click="submit"
-        >
-            {{ loading ? 'Loading...' : 'Login' }}
-        </fsButton>
+            <fsInput
+                v-model="form.password"
+                :error="errors.password"
+                label="Password"
+                placeholder="Password"
+                type="password"
+            />
+
+            <div
+                v-if="errors.global"
+                class="text-sm text-red-600"
+            >
+                {{ errors.global }}
+            </div>
+
+            <fsButton
+                :disabled="loading"
+                full
+                size="md"
+                type="submit"
+                variant="primary"
+            >
+                {{ loading ? 'Loading...' : 'Login' }}
+            </fsButton>
+
+        </form>
     </div>
 </template>

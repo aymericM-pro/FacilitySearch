@@ -18,6 +18,7 @@ const menuItems: MenuItem[] = [
     { id: 'home', icon: 'mdi-home-outline', label: 'Home', route: AppRoute.HOME },
     { id: 'jobs', icon: 'mdi-briefcase-outline', label: 'Jobs', route: AppRoute.JOBS },
     { id: 'trigger', icon: 'mdi-flash-outline', label: 'Trigger', route: AppRoute.TRIGGER },
+    { id: 'companies', icon: 'mdi-domain', label: 'Companies', route: AppRoute.COMPANIES },
 ];
 
 const activeRoute = computed(() => route.name);

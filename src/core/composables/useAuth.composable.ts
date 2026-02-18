@@ -1,47 +1,32 @@
 import { ref } from 'vue';
-import axios from 'axios';
+import api from '@/core/axios/axios.ts';
 
 const token = ref<string | null>(localStorage.getItem('token'));
 
-// Mock user temporaire
 const user = ref<{
     name: string;
     email: string;
-} | null>(
-    token.value
-        ? {
-            name: 'Mia Lore',
-            email: 'mia.lore@example.com',
-        }
-        : null,
-);
+} | null>(null);
 
 export function useAuth() {
 
     const login = async (payload: { email: string; password: string }) => {
-        const { data } = await axios.post(
-            'http://localhost:8080/api/auth/login',
-            payload,
-        );
+        const { data } = await api.post('/auth/login', payload);
 
-        token.value = data.token;
-        localStorage.setItem('token', data.token);
+        token.value = data.accessToken;
+        localStorage.setItem('token', data.accessToken);
 
-        // Mock user après login
         user.value = {
-            name: 'Mia Lore',
+            name: 'User',
             email: payload.email,
         };
     };
 
     const register = async (payload: { email: string; pseudo: string; password: string }) => {
-        const { data } = await axios.post(
-            'http://localhost:8080/api/auth/register',
-            payload,
-        );
+        const { data } = await api.post('/auth/register', payload);
 
-        token.value = data.token;
-        localStorage.setItem('token', data.token);
+        token.value = data.accessToken;
+        localStorage.setItem('token', data.accessToken);
 
         user.value = {
             name: payload.pseudo,

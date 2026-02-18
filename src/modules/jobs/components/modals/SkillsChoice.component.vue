@@ -1,32 +1,53 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import FilterShell from '@/core/components/fsFilterShell.component.vue';
+import api from '@/core/axios/axios.ts';
 
-const props = defineProps<{
-    modelValue: string[];
-    allSkills: string[];
-    close: () => void;
+defineProps<{
+    modelValue: string[]
+    close: () => void
 }>();
 
 const emit = defineEmits<(e: 'update:modelValue', value: string[]) => void>();
 
 const search = ref('');
+const allSkills = ref<string[]>([]);
+const loading = ref(false);
+const error = ref<string | null>(null);
+
+onMounted(async () => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+        const { data } = await api.get('/skills', {
+            params: { size: 1000 },
+        });
+
+        allSkills.value = data.content.map((s: any) => s.name);
+
+    } catch (err: any) {
+        error.value = err?.message || 'Failed to load skills';
+    } finally {
+        loading.value = false;
+    }
+});
 
 const filteredSkills = computed(() => {
-    if (!search.value) return props.allSkills;
+    if (!search.value) return allSkills.value;
 
-    return props.allSkills.filter(skill =>
+    return allSkills.value.filter(skill =>
         skill.toLowerCase().includes(search.value.toLowerCase()),
     );
 });
 
 const toggleSkill = (skill: string, list: string[]) => {
-    if (list.includes(skill)) {
-        return list.filter(s => s !== skill);
-    }
-    return [...list, skill];
+    return list.includes(skill)
+        ? list.filter(s => s !== skill)
+        : [...list, skill];
 };
 </script>
+
 
 <template>
     <FilterShell
