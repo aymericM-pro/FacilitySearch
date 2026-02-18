@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import fsCompanyCard, { type FsCompany } from '@/modules/companies/components/fsCompanyCard.component.vue';
 import FsListingLayout from '@/core/components/FsListingLayout.component.vue';
 import FsFilterBar from '@/core/components/FsFilterBar.component.vue';
@@ -8,6 +9,7 @@ import { useCompanies } from '@/modules/companies/composables/useCompanies.compo
 import { useCompanyFilterConfig } from '@/modules/companies/composables/useCompanyConfig.composable';
 import type { CompanyFilters } from '@/modules/companies/composables/useCompanyFilters.composable';
 
+const { t } = useI18n();
 const currentPage = ref(1);
 const pageSize = 8;
 const search = ref('');
@@ -64,8 +66,8 @@ onMounted(() => {
         :loading="loading"
         :page-size="pageSize"
         :total-items="totalItems"
-        description="Browse all registered companies"
-        title="Companies"
+        :description="t('companies.list.description')"
+        :title="t('companies.list.title')"
         @search="val => search = val"
     >
         <!-- Filters -->
@@ -95,7 +97,7 @@ onMounted(() => {
                 v-else
                 class="text-center py-12 text-slate-400"
             >
-                No companies found.
+                {{ t('companies.list.empty') }}
             </div>
         </template>
     </FsListingLayout>

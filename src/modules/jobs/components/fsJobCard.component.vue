@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import { useNavigation } from '@/core/composables/navigation.composable.ts';
 import { AppRoute } from '@/router';
 
@@ -20,6 +21,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<(e: 'apply', job: FsJob) => void>();
+const { t } = useI18n();
 const { goToWithParams } = useNavigation();
 
 
@@ -39,8 +41,8 @@ const formatSalary = (min?: number | null, max?: number | null) => {
     if (!min && !max) return '';
 
     if (min && max) return `${min}€ - ${max}€`;
-    if (min) return `From ${min}€`;
-    if (max) return `Up to ${max}€`;
+    if (min) return t('jobs.card.salaryFrom', { min });
+    if (max) return t('jobs.card.salaryUpTo', { max });
 
     return '';
 };
@@ -80,14 +82,14 @@ const formatSalary = (min?: number | null, max?: number | null) => {
                     v-if="job.remote === true"
                     class="px-2 py-1 text-xs rounded-full bg-emerald-100 text-emerald-700"
                 >
-          Remote
+          {{ t('jobs.card.remote') }}
         </span>
 
                 <span
                     v-if="job.remote === false"
                     class="px-2 py-1 text-xs rounded-full bg-slate-200 text-slate-600"
                 >
-          On-site
+          {{ t('jobs.card.onSite') }}
         </span>
 
             </div>
@@ -116,11 +118,11 @@ const formatSalary = (min?: number | null, max?: number | null) => {
         <!-- ACTIONS -->
         <div class="flex gap-3 pt-5">
             <button class="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-sm" @click="goToDetail">
-                View details
+                {{ t('jobs.card.viewDetails') }}
             </button>
 
             <button class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm">
-                Apply
+                {{ t('jobs.card.apply') }}
             </button>
         </div>
 

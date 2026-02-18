@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import fsJobCard from '@/modules/jobs/components/fsJobCard.component.vue';
 import fsPagination from '@/core/design-system/fsPagination.component.vue';
 import { useCompanyJobOffers } from '@/modules/company/composables/useCompanyJobOffers.composable';
 
+const { t } = useI18n();
 const route = useRoute();
 const companyId = route.params.id as string;
 
@@ -27,10 +29,10 @@ watch(page, () => {
     <div class="max-w-6xl mx-auto space-y-8">
 
         <h1 class="text-2xl font-semibold">
-            Company Job Offers
+            {{ t('companies.detail.title') }}
         </h1>
 
-        <div v-if="loading">Loading...</div>
+        <div v-if="loading">{{ t('companies.detail.loading') }}</div>
 
         <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <fsJobCard

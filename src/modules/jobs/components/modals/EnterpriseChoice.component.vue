@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 import FilterShell from '@/core/components/fsFilterShell.component.vue';
 
@@ -10,6 +11,7 @@ defineProps<{
 
 const emit = defineEmits<(e: 'update:modelValue', value: string[]) => void>();
 
+const { t } = useI18n();
 const search = ref('');
 const allEnterprises = ref<string[]>([]);
 const loading = ref(false);
@@ -61,7 +63,7 @@ const toggleEnterprise = (company: string, current: string[]) => {
                 v-model="search"
                 class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg
                focus:outline-none focus:ring-2 focus:ring-slate-900"
-                placeholder="Search company..."
+                :placeholder="t('jobs.filters.enterprise.searchPlaceholder')"
                 type="text"
             />
 
@@ -69,7 +71,7 @@ const toggleEnterprise = (company: string, current: string[]) => {
                 v-if="loading"
                 class="text-xs text-slate-400 py-2"
             >
-                Loading companies...
+                {{ t('jobs.filters.enterprise.loading') }}
             </div>
 
             <div
@@ -95,7 +97,7 @@ const toggleEnterprise = (company: string, current: string[]) => {
                     v-if="filteredEnterprises.length === 0"
                     class="text-xs text-slate-400"
                 >
-                    No results
+                    {{ t('jobs.filters.enterprise.noResults') }}
                 </div>
             </div>
 

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import FilterShell from '@/core/components/fsFilterShell.component.vue';
 
 defineProps<{
@@ -10,11 +12,13 @@ const emit = defineEmits<
     (e: 'update:modelValue', value: boolean | null) => void
 >();
 
-const options = [
-    { label: 'All', value: null },
-    { label: 'Remote only', value: true },
-    { label: 'On-site only', value: false },
-];
+const { t } = useI18n();
+
+const options = computed(() => [
+    { label: t('jobs.filters.remote.all'), value: null },
+    { label: t('jobs.filters.remote.remoteOnly'), value: true },
+    { label: t('jobs.filters.remote.onSiteOnly'), value: false },
+]);
 </script>
 
 <template>

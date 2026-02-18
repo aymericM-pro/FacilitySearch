@@ -35,4 +35,98 @@ export const fr = {
         success: 'Job déclenché avec succès.',
         error: 'Une erreur est survenue.',
     },
+
+    companies: {
+        card: {
+            createdAt: 'Créée le {date}',
+            viewDetails: 'Voir les détails',
+        },
+        list: {
+            title: 'Entreprises',
+            description: 'Parcourir toutes les entreprises enregistrées',
+            empty: 'Aucune entreprise trouvée.',
+        },
+        detail: {
+            title: 'Offres d\'emploi de l\'entreprise',
+            loading: 'Chargement...',
+        },
+        filters: {
+            industry: {
+                searchPlaceholder: 'Rechercher un secteur...',
+                loading: 'Chargement des secteurs...',
+                noResults: 'Aucun résultat',
+            },
+            type: {
+                searchPlaceholder: 'Rechercher un type...',
+                loading: 'Chargement des types...',
+                noResults: 'Aucun résultat',
+            },
+            city: {
+                searchPlaceholder: 'Rechercher une ville...',
+                loading: 'Chargement des villes...',
+                noResults: 'Aucun résultat',
+            },
+        },
+    },
+
+    jobs: {
+        list: {
+            title: 'Offres d\'emploi',
+            description: 'Parcourir les postes disponibles',
+            empty: 'Aucun poste trouvé.',
+        },
+        card: {
+            remote: 'Télétravail',
+            onSite: 'Présentiel',
+            viewDetails: 'Voir les détails',
+            apply: 'Postuler',
+            salaryFrom: 'À partir de {min}€',
+            salaryUpTo: 'Jusqu\'à {max}€',
+        },
+        detail: {
+            generateCv: 'Générer un CV',
+            loading: 'Chargement...',
+            viewMyCvs: 'Voir mes CVs',
+            modal: {
+                title: 'Générer un CV pour cette offre',
+                description: 'Cela créera un CV personnalisé pour :',
+                cancel: 'Annuler',
+                generating: 'Génération en cours...',
+                generate: 'Générer',
+            },
+            sidebar: {
+                title: 'Mes CVs',
+                empty: 'Aucun CV généré pour l\'instant.',
+                open: 'Ouvrir',
+            },
+            errors: {
+                loadCvs: 'Impossible de charger les CVs',
+                generation: 'La génération a échoué',
+            },
+        },
+        filters: {
+            contract: {
+                all: 'Tous',
+                cdi: 'CDI',
+                cdd: 'CDD',
+                freelance: 'Freelance',
+                internship: 'Stage',
+                apprenticeship: 'Alternance',
+            },
+            remote: {
+                all: 'Tous',
+                remoteOnly: 'Télétravail uniquement',
+                onSiteOnly: 'Présentiel uniquement',
+            },
+            enterprise: {
+                searchPlaceholder: 'Rechercher une entreprise...',
+                loading: 'Chargement des entreprises...',
+                noResults: 'Aucun résultat',
+            },
+            skills: {
+                searchPlaceholder: 'Rechercher des compétences...',
+                noResults: 'Aucun résultat',
+            },
+        },
+    },
 } as const;

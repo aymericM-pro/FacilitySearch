@@ -26,4 +26,98 @@ export const en = {
         success: 'Job successfully triggered.',
         error: 'An error occurred.',
     },
+
+    companies: {
+        card: {
+            createdAt: 'Created {date}',
+            viewDetails: 'View details',
+        },
+        list: {
+            title: 'Companies',
+            description: 'Browse all registered companies',
+            empty: 'No companies found.',
+        },
+        detail: {
+            title: 'Company Job Offers',
+            loading: 'Loading...',
+        },
+        filters: {
+            industry: {
+                searchPlaceholder: 'Search industry...',
+                loading: 'Loading industries...',
+                noResults: 'No results',
+            },
+            type: {
+                searchPlaceholder: 'Search type...',
+                loading: 'Loading types...',
+                noResults: 'No results',
+            },
+            city: {
+                searchPlaceholder: 'Search city...',
+                loading: 'Loading cities...',
+                noResults: 'No results',
+            },
+        },
+    },
+
+    jobs: {
+        list: {
+            title: 'Job Opportunities',
+            description: 'Browse available positions',
+            empty: 'No jobs found.',
+        },
+        card: {
+            remote: 'Remote',
+            onSite: 'On-site',
+            viewDetails: 'View details',
+            apply: 'Apply',
+            salaryFrom: 'From {min}€',
+            salaryUpTo: 'Up to {max}€',
+        },
+        detail: {
+            generateCv: 'Generate CV',
+            loading: 'Loading...',
+            viewMyCvs: 'View My CVs',
+            modal: {
+                title: 'Generate CV for this job',
+                description: 'This will create a tailored CV for:',
+                cancel: 'Cancel',
+                generating: 'Generating...',
+                generate: 'Generate',
+            },
+            sidebar: {
+                title: 'My CVs',
+                empty: 'No CV generated yet.',
+                open: 'Open',
+            },
+            errors: {
+                loadCvs: 'Failed to load CVs',
+                generation: 'Generation failed',
+            },
+        },
+        filters: {
+            contract: {
+                all: 'All',
+                cdi: 'CDI',
+                cdd: 'CDD',
+                freelance: 'Freelance',
+                internship: 'Internship',
+                apprenticeship: 'Apprenticeship',
+            },
+            remote: {
+                all: 'All',
+                remoteOnly: 'Remote only',
+                onSiteOnly: 'On-site only',
+            },
+            enterprise: {
+                searchPlaceholder: 'Search company...',
+                loading: 'Loading companies...',
+                noResults: 'No results',
+            },
+            skills: {
+                searchPlaceholder: 'Search skills...',
+                noResults: 'No results',
+            },
+        },
+    },
 } as const;

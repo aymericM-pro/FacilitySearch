@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import FilterShell from '@/core/components/fsFilterShell.component.vue';
 import api from '@/core/axios/axios.ts';
 
@@ -10,6 +11,7 @@ defineProps<{
 
 const emit = defineEmits<(e: 'update:modelValue', value: string[]) => void>();
 
+const { t } = useI18n();
 const search = ref('');
 const allTypes = ref<string[]>([]);
 const loading = ref(false);
@@ -54,7 +56,7 @@ const toggleType = (type: string, current: string[]) => {
                 v-model="search"
                 class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg
                focus:outline-none focus:ring-2 focus:ring-slate-900"
-                placeholder="Search type..."
+                :placeholder="t('companies.filters.type.searchPlaceholder')"
                 type="text"
             />
 
@@ -62,7 +64,7 @@ const toggleType = (type: string, current: string[]) => {
                 v-if="loading"
                 class="text-xs text-slate-400 py-2"
             >
-                Loading types...
+                {{ t('companies.filters.type.loading') }}
             </div>
 
             <div
@@ -92,7 +94,7 @@ const toggleType = (type: string, current: string[]) => {
                     v-if="filteredTypes.length === 0"
                     class="text-xs text-slate-400 px-4 py-2"
                 >
-                    No results
+                    {{ t('companies.filters.type.noResults') }}
                 </div>
             </div>
 

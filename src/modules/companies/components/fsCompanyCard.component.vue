@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import type { AppRouteName } from '@/router';
 import { useNavigation } from '@/core/composables/navigation.composable.ts';
 
@@ -13,10 +14,14 @@ const props = defineProps<{
     company: FsCompany
 }>();
 
+const { t } = useI18n();
 const { goToWithParams } = useNavigation();
 
 const formatDate = (date?: string | null) => {
-    if (!date) return '';
+    if (!date) {
+        return '';
+    }
+
     return new Date(date).toLocaleDateString();
 };
 
@@ -40,13 +45,13 @@ const goToDetails = () => {
             </p>
 
             <p v-if="company.createdAt" class="text-xs text-slate-400">
-                Created {{ formatDate(company.createdAt) }}
+                {{ t('companies.card.createdAt', { date: formatDate(company.createdAt) }) }}
             </p>
         </div>
 
         <div class="pt-5">
             <button class="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-sm" @click="goToDetails">
-                View details
+                {{ t('companies.card.viewDetails') }}
             </button>
         </div>
 

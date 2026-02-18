@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 import fsBar from '@/core/components/fsBar.component.vue';
 import fsButton from '@/core/design-system/fsButton.component.vue';
@@ -7,6 +8,7 @@ import { agorapulseJob } from '@/modules/job/datas/agorapulse.job';
 
 const job = agorapulseJob;
 
+const { t } = useI18n();
 const loading = ref(false);
 const generating = ref(false);
 const error = ref<string | null>(null);
@@ -40,7 +42,7 @@ const loadUserCvsForOffer = async () => {
         showSidebar.value = true;
 
     } catch {
-        error.value = 'Failed to load CVs';
+        error.value = t('jobs.detail.errors.loadCvs');
     } finally {
         loading.value = false;
     }
@@ -70,7 +72,7 @@ const generateCv = async () => {
         await loadUserCvsForOffer();
 
     } catch {
-        error.value = 'Generation failed';
+        error.value = t('jobs.detail.errors.generation');
     } finally {
         generating.value = false;
     }
@@ -101,7 +103,7 @@ const closeSidebar = () => {
                         variant="secondary"
                         @click="showModal = true"
                     >
-                        Generate CV
+                        {{ t('jobs.detail.generateCv') }}
                     </fsButton>
 
                     <fsButton
@@ -109,7 +111,7 @@ const closeSidebar = () => {
                         variant="primary"
                         @click="loadUserCvsForOffer"
                     >
-                        {{ loading ? 'Loading...' : 'View My CVs' }}
+                        {{ loading ? t('jobs.detail.loading') : t('jobs.detail.viewMyCvs') }}
                     </fsButton>
                 </div>
             </template>
@@ -143,11 +145,11 @@ const closeSidebar = () => {
         <div class="relative bg-white w-[420px] rounded-2xl shadow-xl p-8 space-y-6">
 
             <h2 class="text-lg font-semibold">
-                Generate CV for this job
+                {{ t('jobs.detail.modal.title') }}
             </h2>
 
             <p class="text-sm text-slate-600">
-                This will create a tailored CV for:
+                {{ t('jobs.detail.modal.description') }}
                 <br />
                 <strong>{{ job.title }}</strong> at <strong>{{ job.company }}</strong>
             </p>
@@ -157,7 +159,7 @@ const closeSidebar = () => {
                     variant="secondary"
                     @click="showModal = false"
                 >
-                    Cancel
+                    {{ t('jobs.detail.modal.cancel') }}
                 </fsButton>
 
                 <fsButton
@@ -165,7 +167,7 @@ const closeSidebar = () => {
                     variant="primary"
                     @click="generateCv"
                 >
-                    {{ generating ? 'Generating...' : 'Generate' }}
+                    {{ generating ? t('jobs.detail.modal.generating') : t('jobs.detail.modal.generate') }}
                 </fsButton>
             </div>
         </div>
@@ -189,7 +191,7 @@ const closeSidebar = () => {
         >
             <div class="p-6 border-b flex justify-between items-center">
                 <h2 class="text-lg font-semibold">
-                    My CVs
+                    {{ t('jobs.detail.sidebar.title') }}
                 </h2>
 
                 <button
@@ -203,7 +205,7 @@ const closeSidebar = () => {
             <div class="flex-1 overflow-y-auto p-6 space-y-4">
 
                 <div v-if="!cvs.length" class="text-slate-500">
-                    No CV generated yet.
+                    {{ t('jobs.detail.sidebar.empty') }}
                 </div>
 
                 <div
@@ -222,7 +224,7 @@ const closeSidebar = () => {
                         variant="secondary"
                         @click="openPdf(cv.url)"
                     >
-                        Open
+                        {{ t('jobs.detail.sidebar.open') }}
                     </fsButton>
                 </div>
             </div>

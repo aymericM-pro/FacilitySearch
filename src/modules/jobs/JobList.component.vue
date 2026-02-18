@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import fsJobCard, { type FsJob } from '@/modules/jobs/components/fsJobCard.component.vue';
 import FsListingLayout from '@/core/components/FsListingLayout.component.vue';
 import FsFilterBar from '@/core/components/FsFilterBar.component.vue';
@@ -8,6 +9,7 @@ import { useJobPagination } from '@/modules/jobs/composables/useJobPagination.co
 import { useJobLoader } from '@/modules/jobs/composables/useJobLoader.composable';
 import { useJobFilterConfig } from '@/modules/jobs/datas/filters.datas';
 
+const { t } = useI18n();
 const { filters } = useJobFilters();
 const { currentPage, pageSize } = useJobPagination();
 const { jobs, totalItems, loading, error, loadJobs } = useJobLoader();
@@ -65,8 +67,8 @@ onMounted(() => {
         :loading="loading"
         :page-size="pageSize"
         :total-items="totalItems"
-        description="Browse available positions"
-        title="Job Opportunities"
+        :description="t('jobs.list.description')"
+        :title="t('jobs.list.title')"
         @search="val => search = val"
     >
         <!-- Filters -->
@@ -96,7 +98,7 @@ onMounted(() => {
                 v-else
                 class="text-center py-12 text-slate-400"
             >
-                No jobs found.
+                {{ t('jobs.list.empty') }}
             </div>
         </template>
     </FsListingLayout>

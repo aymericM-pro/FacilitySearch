@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import FilterShell from '@/core/components/fsFilterShell.component.vue';
 
 defineProps<{
@@ -8,14 +10,16 @@ defineProps<{
 
 const emit = defineEmits<(e: 'update:modelValue', value: string | null) => void>();
 
-const types = [
-    { label: 'All', value: null },
-    { label: 'CDI', value: 'CDI' },
-    { label: 'CDD', value: 'CDD' },
-    { label: 'FREELANCE', value: 'FREELANCE' },
-    { label: 'INTERNSHIP', value: 'INTERNSHIP' },
-    { label: 'APPRENTICESHIP', value: 'APPRENTICESHIP' },
-];
+const { t } = useI18n();
+
+const types = computed(() => [
+    { label: t('jobs.filters.contract.all'), value: null },
+    { label: t('jobs.filters.contract.cdi'), value: 'CDI' },
+    { label: t('jobs.filters.contract.cdd'), value: 'CDD' },
+    { label: t('jobs.filters.contract.freelance'), value: 'FREELANCE' },
+    { label: t('jobs.filters.contract.internship'), value: 'INTERNSHIP' },
+    { label: t('jobs.filters.contract.apprenticeship'), value: 'APPRENTICESHIP' },
+]);
 </script>
 
 <template>
