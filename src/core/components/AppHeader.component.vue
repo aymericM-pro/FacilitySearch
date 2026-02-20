@@ -6,10 +6,12 @@ import { useAuth } from '@/core/composables/useAuth.composable.ts';
 import FsHeader from '@/core/design-system/fsHeader.component.vue';
 import FsPopover from '@/core/design-system/fsPopover.component.vue';
 import { useSidebarStore } from '@/core/stores/useSidebarStore.store';
+import { useNotificationStore } from '@/core/stores/useNotificationStore.store';
 
 const router = useRouter();
 const { token, logout, user } = useAuth();
 const sidebar = useSidebarStore();
+const notifications = useNotificationStore();
 
 const isAuthenticated = computed(() => !!token.value);
 
@@ -61,8 +63,15 @@ const handleLogout = (close: () => void) => {
                     <i class="mdi mdi-magnify absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
                 </div>
 
-                <button class="hidden sm:flex p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition relative">
+                <button
+                    class="hidden sm:flex p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition relative"
+                    @click="notifications.toggle()"
+                >
                     <i class="mdi mdi-bell-outline text-xl"></i>
+                    <span
+                        v-if="notifications.unreadCount > 0"
+                        class="absolute top-1 right-1 w-2 h-2 rounded-full bg-indigo-500"
+                    />
                 </button>
 
                 <button class="hidden sm:flex p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition">

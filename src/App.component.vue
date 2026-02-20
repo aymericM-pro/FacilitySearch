@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router';
 import AppSidebar from '@/core/components/fsSidebar.component.vue';
 import AppMobileMenu from '@/core/components/AppMobileMenu.component.vue';
+import AppNotifications from '@/core/components/AppNotifications.component.vue';
 import AppToasts from '@/core/design-system/fsToast.component.vue';
 import AppHeader from '@/core/components/AppHeader.component.vue';
 import { useSidebarStore } from '@/core/stores/useSidebarStore.store';
@@ -20,7 +21,12 @@ const sidebar = useSidebarStore();
             <AppHeader />
 
             <Transition name="slide-down">
-                <AppMobileMenu v-if="sidebar.isOpen" class="lg:hidden" />
+                <div
+                    v-if="sidebar.isOpen"
+                    class="fixed top-0 left-0 right-0 z-50 bg-slate-900 text-white shadow-xl">
+                    >
+                    <AppMobileMenu />
+                </div>
             </Transition>
 
             <main class="flex-1 px-10 py-8">
@@ -29,18 +35,24 @@ const sidebar = useSidebarStore();
             <AppToasts />
         </div>
 
+        <AppNotifications />
+
     </div>
 </template>
 
 <style scoped>
 .slide-down-enter-active,
 .slide-down-leave-active {
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    transition: transform 0.3s ease, opacity 0.2s ease;
 }
 
-.slide-down-enter-from,
-.slide-down-leave-to {
+.slide-down-enter-from {
+    transform: translateY(-100%);
     opacity: 0;
-    transform: translateY(-8px);
+}
+
+.slide-down-leave-to {
+    transform: translateY(-100%);
+    opacity: 0;
 }
 </style>

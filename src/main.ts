@@ -1,8 +1,8 @@
 import { createApp } from 'vue';
 import '@/style.css';
 import '@mdi/font/css/materialdesignicons.css';
-import App from './App.component.vue';
-import router from './router';
+import App from '@/App.component.vue';
+import router from '@/router';
 import { i18n } from '@/core/i18n';
 import { createPinia } from 'pinia';
 

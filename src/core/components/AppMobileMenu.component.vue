@@ -32,18 +32,50 @@ const navigate = (routeName: MenuItem['route']) => {
 </script>
 
 <template>
-    <div class="overflow-hidden">
-        <nav class="flex items-center justify-around bg-slate-900 text-gray-400 px-4 py-3">
-            <button
-                v-for="item in menuItems"
-                :key="item.id"
-                :class="activeRoute === item.route ? 'text-white bg-white/10' : 'hover:text-white hover:bg-white/5'"
-                class="flex flex-col items-center gap-1 px-6 py-2 rounded-xl transition text-sm flex-1"
-                @click="navigate(item.route)"
-            >
-                <i :class="item.icon" class="mdi text-xl"></i>
-                <span class="text-xs font-medium">{{ item.label }}</span>
-            </button>
-        </nav>
+    <div class="fixed inset-0 z-50">
+
+        <!-- Backdrop -->
+        <div
+            class="absolute inset-0 bg-black/40"
+            @click="sidebar.close()"
+        />
+
+        <!-- Menu -->
+        <div class="relative bg-slate-900 text-white shadow-xl">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between px-6 py-5 border-b border-white/10">
+                <h2 class="text-lg font-semibold tracking-wide">
+                    Navigation
+                </h2>
+
+                <button
+                    class="p-2 rounded-lg hover:bg-white/10 transition"
+                    @click="sidebar.close()"
+                >
+                    <i class="mdi mdi-close text-2xl"></i>
+                </button>
+            </div>
+
+            <!-- Liens -->
+            <nav class="flex flex-col px-6 py-6 gap-2">
+                <button
+                    v-for="item in menuItems"
+                    :key="item.id"
+                    :class="activeRoute === item.route
+            ? 'bg-white/10 text-white'
+            : 'text-gray-300 hover:bg-white/5 hover:text-white'"
+                    class="flex items-center gap-4 px-4 py-4 rounded-xl transition"
+                    @click="navigate(item.route)"
+                >
+                    <i :class="item.icon" class="mdi text-xl"></i>
+                    <span class="font-medium text-base">
+            {{ item.label }}
+          </span>
+                </button>
+            </nav>
+
+        </div>
+
     </div>
 </template>
