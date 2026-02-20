@@ -1,18 +1,19 @@
 <script lang="ts" setup>
 defineProps<{
-    isOpen: boolean;
-    title: string;
+    isOpen: boolean
+    title: string
+    width?: string // ex: w-96 | max-w-md | w-[420px]
 }>();
 
 const emit = defineEmits<{
-    close: [];
-    save: [];
+    close: []
 }>();
 </script>
 
 <template>
     <Teleport to="body">
-        <!-- Overlay -->
+
+        <!-- Backdrop -->
         <Transition name="fade">
             <div
                 v-if="isOpen"
@@ -25,10 +26,20 @@ const emit = defineEmits<{
         <Transition name="slide-right">
             <div
                 v-if="isOpen"
-                class="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col will-change-transform">
+                :class="[
+                    'fixed right-0 top-0 h-full bg-white shadow-2xl z-50 flex flex-col will-change-transform',
+                    width ?? 'w-96'
+                ]"
+            >
                 <!-- Header -->
                 <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-                    <h2 class="text-lg font-semibold text-gray-800">{{ title }}</h2>
+                    <div class="flex items-center gap-3">
+                        <h2 class="text-lg font-semibold text-gray-800">
+                            {{ title }}
+                        </h2>
+                        <slot name="header-extra" />
+                    </div>
+
                     <button
                         class="p-2 rounded-lg text-gray-400 hover:bg-gray-100 transition"
                         @click="emit('close')"
@@ -42,27 +53,18 @@ const emit = defineEmits<{
                     <slot />
                 </div>
 
-                <!-- Footer -->
-                <div class="flex justify-end gap-3 px-6 py-4 border-t border-gray-100">
-                    <button
-                        class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 transition"
-                        @click="emit('close')"
-                    >
-                        Annuler
-                    </button>
-                    <button
-                        class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition shadow-sm"
-                        @click="emit('save')"
-                    >
-                        Enregistrer
-                    </button>
+                <!-- Footer (optionnel) -->
+                <div v-if="$slots.footer"
+                     class="px-6 py-4 border-t border-gray-100">
+                    <slot name="footer" />
                 </div>
             </div>
         </Transition>
+
     </Teleport>
 </template>
 
-<style>
+<style scoped>
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.25s ease;

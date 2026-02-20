@@ -5,13 +5,13 @@ import { useDialogService } from '@/core/composables/dialog.composable.ts';
 import type { EditSection } from '@/core/composables/editSidebar.composable.ts';
 import { useEditSidebarService } from '@/core/composables/editSidebar.composable.ts';
 import fsDialog from '@/core/components/fsDialog.component.vue';
-import fsEditSidebar from '@/core/components/fsEditSidebar.component.vue';
 import EditHeaderForm from '@/modules/profile/components/EditHeaderForm.component.vue';
 import EditAboutForm from '@/modules/profile/components/EditAboutForm.component.vue';
 import EditSkillsForm from '@/modules/profile/components/EditSkillsForm.component.vue';
 import EditExperienceForm from '@/modules/profile/components/EditExperienceForm.component.vue';
 import EditEducationForm from '@/modules/profile/components/EditEducationForm.component.vue';
 import EditContactForm from '@/modules/profile/components/EditContactForm.component.vue';
+import fsSidebarPanel from '@/core/components/fsSidebarPanel.component.vue';
 
 const dialog = useDialogService();
 const editSidebar = useEditSidebarService();
@@ -600,12 +600,13 @@ const confirmDelete = () => {
 
         </fsDialog>
 
-        <fsEditSidebar
-            :is-open="editSidebar.state.isOpen"
+        <fsSidebarPanel
+            :isOpen="editSidebar.state.isOpen"
             :title="sidebarTitle"
+            width="max-w-md w-full"
             @close="editSidebar.close()"
-            @save="handleSidebarSave"
         >
+            <!-- BODY -->
             <template v-if="editSidebar.state.section && formData">
                 <EditHeaderForm
                     v-if="editSidebar.state.section.type === 'header'"
@@ -632,7 +633,25 @@ const confirmDelete = () => {
                     v-model="formData"
                 />
             </template>
-        </fsEditSidebar>
+
+            <!-- FOOTER -->
+            <template #footer>
+                <div class="flex justify-end gap-3">
+                    <button
+                        class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 transition"
+                        @click="editSidebar.close()"
+                    >
+                        Annuler
+                    </button>
+                    <button
+                        class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition shadow-sm"
+                        @click="handleSidebarSave"
+                    >
+                        Enregistrer
+                    </button>
+                </div>
+            </template>
+        </fsSidebarPanel>
 
     </div>
 </template>
