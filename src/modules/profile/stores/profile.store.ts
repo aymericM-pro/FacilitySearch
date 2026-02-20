@@ -1,69 +1,91 @@
 import { defineStore } from 'pinia';
-import { profile } from '@/modules/profile/datas/profile.data';
-import type { Education, Experience, Profile } from '@/modules/profile/models/experience.model';
+import api from '@/core/axios/axios';
+import { ref } from 'vue';
+import type { Profile } from '@/modules/profile/models/experience.model';
 
 export const useProfileStore = defineStore('profile', () => {
 
-    const updateHeader = (
-        data: Pick<Profile, 'name' | 'title' | 'location' | 'available'>,
-    ) => {
-        Object.assign(profile, data);
+    const profile = ref<Profile | null>(null);
+
+    const loadProfile = async (id: string) => {
+        const { data: profileData } = await api.get(`/profiles/${id}`);
+
+        const { data: experiences } = await api.get(`/experiences/profile/${id}`);
+        const { data: educations } = await api.get(`/educations/profile/${id}`);
+
+        profile.value = {
+            ...profileData,
+            experiences,
+            educations,
+        };
     };
 
-    const updateAbout = (about: string) => {
-        profile.about = about;
+    const updateHeader = async (id: string, payload: any) => {
+        const { data } = await api.put(`/profiles/${id}`, payload);
+        profile.value = data;
     };
 
-    const updateSkills = (skills: string[]) => {
-        profile.skills = skills;
+    const createExperience = async (payload: any) => {
+        const { data } = await api.post('/experiences', payload);
+        profile.value?.experiences.push(data);
     };
 
-    const saveExperience = (item: Experience | null, data: Experience) => {
-        if (item) {
-            Object.assign(item, data);
-        } else {
-            profile.experiences.push(data);
+    const updateExperience = async (id: string, payload: any) => {
+        const { data } = await api.put(`/experiences/${id}`, payload);
+
+        if (profile.value) {
+            const index = profile.value.experiences.findIndex(e => e.id === id);
+            if (index !== -1) {
+                profile.value.experiences[index] = data;
+            }
         }
     };
 
-    const deleteExperience = (item: Experience) => {
-        profile.experiences = profile.experiences.filter(e => e !== item);
+    const deleteExperience = async (id: string) => {
+        await api.delete(`/experiences/${id}`);
+
+        if (profile.value) {
+            profile.value.experiences =
+                profile.value.experiences.filter(e => e.id !== id);
+        }
+    };
+    
+    const createEducation = async (payload: any) => {
+        const { data } = await api.post('/educations', payload);
+        profile.value?.educations.push(data);
     };
 
-    const saveEducation = (item: Education | null, data: Education) => {
-        if (item) {
-            Object.assign(item, data);
-        } else {
-            profile.educations.push(data);
+    const updateEducation = async (id: string, payload: any) => {
+        const { data } = await api.put(`/educations/${id}`, payload);
+
+        if (profile.value) {
+            const index = profile.value.educations.findIndex(e => e.id === id);
+            if (index !== -1) {
+                profile.value.educations[index] = data;
+            }
         }
     };
 
-    const deleteEducation = (item: Education) => {
-        profile.educations = profile.educations.filter(e => e !== item);
-    };
+    const deleteEducation = async (id: string) => {
+        await api.delete(`/educations/${id}`);
 
-    const updateContact = (
-        data: Pick<Profile, 'email' | 'phone' | 'linkedin' | 'website' | 'address'>,
-    ) => {
-        Object.assign(profile, {
-            email: data.email,
-            phone: data.phone,
-            linkedin: data.linkedin,
-            website: data.website,
-        });
-
-        Object.assign(profile.address, data.address);
+        if (profile.value) {
+            profile.value.educations =
+                profile.value.educations.filter(e => e.id !== id);
+        }
     };
 
     return {
         profile,
+        loadProfile,
         updateHeader,
-        updateAbout,
-        updateSkills,
-        saveExperience,
+
+        createExperience,
+        updateExperience,
         deleteExperience,
-        saveEducation,
+
+        createEducation,
+        updateEducation,
         deleteEducation,
-        updateContact,
     };
 });

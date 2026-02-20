@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { useProfileStore } from '@/modules/profile/stores/profile.store.ts';
+import { useProfileStore } from '@/modules/profile/stores/profile.store';
 import ProfileSection from './ProfileSection.component.vue';
 
 const { t } = useI18n();
@@ -10,8 +10,9 @@ const emit = defineEmits<{ edit: [] }>();
 
 <template>
     <ProfileSection
-        :title="t('profile.sections.about')"
+        v-if="store.profile"
         :action-label="t('common.actions.edit')"
+        :title="t('profile.sections.about')"
         icon="mdi-text-box-outline"
         @action="emit('edit')"
     >

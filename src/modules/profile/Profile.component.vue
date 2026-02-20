@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useProfileStore } from '@/modules/profile/stores/profile.store.ts';
-import { useDialogService } from '@/core/composables/dialog.composable.ts';
-import type { EditSection } from '@/core/composables/editSidebar.composable.ts';
-import { useEditSidebarService } from '@/core/composables/editSidebar.composable.ts';
+import { useProfileStore } from '@/modules/profile/stores/profile.store';
+import { useDialogService } from '@/core/composables/dialog.composable';
+import type { EditSection } from '@/core/composables/editSidebar.composable';
+import { useEditSidebarService } from '@/core/composables/editSidebar.composable';
 import fsDialog from '@/core/components/fsDialog.component.vue';
 import fsSidebarPanel from '@/core/components/fsSidebarPanel.component.vue';
 
@@ -26,77 +26,145 @@ const store = useProfileStore();
 const dialog = useDialogService();
 const editSidebar = useEditSidebarService();
 
+const PROFILE_ID = '10c6dbe5-c114-4d60-9fc9-ffb7e6e00963';
+
+onMounted(async () => {
+    await store.loadProfile(PROFILE_ID);
+});
+
 const formData = ref<any>(null);
 
 type SectionHandler = {
-    init: (s: EditSection) => any;
-    save: (data: any, s: EditSection) => void;
-};
+    init: (s: EditSection) => any
+    save: (data: any, s: EditSection) => Promise<void>
+}
 
 const sectionHandlers: Record<EditSection['type'], SectionHandler> = {
+
     header: {
         init: () => {
             const p = store.profile;
-            return { name: p.name, title: p.title, location: p.location, available: p.available };
+            return {
+                name: p?.name,
+                title: p?.title,
+                location: p?.location,
+                available: p?.available,
+            };
         },
-        save: (data) => store.updateHeader(data),
+        save: async (data) => {
+            await store.updateHeader(PROFILE_ID, data);
+        },
     },
+
     about: {
-        init: () => ({ about: store.profile.about }),
-        save: (data) => store.updateAbout(data.about),
+        init: () => ({ about: store.profile?.about }),
+        save: async (data) => {
+            await store.updateHeader(PROFILE_ID, { about: data.about });
+        },
     },
+
     skills: {
-        init: () => ({ skills: [...store.profile.skills] }),
-        save: (data) => store.updateSkills(data.skills),
+        init: () => ({ skills: [...(store.profile?.skills ?? [])] }),
+        save: async (data) => {
+            await store.updateHeader(PROFILE_ID, { skills: data.skills });
+        },
     },
+
     experience: {
         init: (s) => {
-            const item = (s as { type: 'experience'; item: any }).item;
+            const item = (s as any).item;
             return item
-                ? JSON.parse(JSON.stringify(item))
-                : { company: '', role: '', period: '', location: '', logo: '' };
+                ? { ...item }
+                : {
+                    role: '',
+                    location: '',
+                    startDate: '',
+                    endDate: '',
+                    description: '',
+                };
         },
-        save: (data, s) => store.saveExperience((s as any).item, data),
+        save: async (data, s) => {
+            const item = (s as any).item;
+
+            if (item?.id) {
+                await store.updateExperience(item.id, data);
+            } else {
+                await store.createExperience({
+                    ...data,
+                    profileId: PROFILE_ID,
+                });
+            }
+        },
     },
+
     education: {
         init: (s) => {
-            const item = (s as { type: 'education'; item: any }).item;
+            const item = (s as any).item;
             return item
-                ? JSON.parse(JSON.stringify(item))
-                : { school: '', degree: '', period: '', location: '', field: '', logo: '' };
+                ? { ...item }
+                : {
+                    school: '',
+                    degree: '',
+                    field: '',
+                    location: '',
+                    startDate: '',
+                    endDate: '',
+                };
         },
-        save: (data, s) => store.saveEducation((s as any).item, data),
+        save: async (data, s) => {
+            const item = (s as any).item;
+
+            if (item?.id) {
+                await store.updateEducation(item.id, data);
+            } else {
+                await store.createEducation({
+                    ...data,
+                    profileId: PROFILE_ID,
+                });
+            }
+        },
     },
+
     contact: {
         init: () => {
             const p = store.profile;
             return {
-                email: p.email,
-                phone: p.phone,
-                linkedin: p.linkedin,
-                website: p.website,
-                address: { ...p.address },
+                email: p?.email,
+                phone: p?.phone,
+                linkedin: p?.linkedin,
+                website: p?.website,
+                address: p?.address,
             };
         },
-        save: (data) => store.updateContact(data),
+        save: async (data) => {
+            await store.updateHeader(PROFILE_ID, data);
+        },
     },
 };
 
 const sidebarTitle = computed(() => {
     const s = editSidebar.state.section;
     if (!s) return '';
+
     switch (s.type) {
-        case 'header': return t('profile.edit.header');
-        case 'about': return t('profile.edit.about');
-        case 'skills': return t('profile.edit.skills');
-        case 'experience': return (s as any).item
-            ? t('profile.edit.experience', { company: (s as any).item.company })
-            : t('profile.edit.experienceNew');
-        case 'education': return (s as any).item
-            ? t('profile.edit.education', { school: (s as any).item.school })
-            : t('profile.edit.educationNew');
-        case 'contact': return t('profile.edit.contact');
-        default: return '';
+        case 'header':
+            return t('profile.edit.header');
+        case 'about':
+            return t('profile.edit.about');
+        case 'skills':
+            return t('profile.edit.skills');
+        case 'experience':
+            return (s as any).item
+                ? t('profile.edit.experience')
+                : t('profile.edit.experienceNew');
+        case 'education':
+            return (s as any).item
+                ? t('profile.edit.education')
+                : t('profile.edit.educationNew');
+        case 'contact':
+            return t('profile.edit.contact');
+        default:
+            return '';
     }
 });
 
@@ -105,14 +173,15 @@ const openEdit = (section: EditSection) => {
     editSidebar.open(section);
 };
 
-const handleSidebarSave = () => {
+const handleSidebarSave = async () => {
     const s = editSidebar.state.section;
     if (!s) return;
-    sectionHandlers[s.type].save(formData.value, s);
+
+    await sectionHandlers[s.type].save(formData.value, s);
     editSidebar.close();
 };
 
-type DeleteTarget = { item: any; type: 'experience' | 'education' };
+type DeleteTarget = { item: any; type: 'experience' | 'education' }
 const selectedItem = ref<DeleteTarget | null>(null);
 
 const handleDelete = (item: any, type: 'experience' | 'education') => {
@@ -120,15 +189,15 @@ const handleDelete = (item: any, type: 'experience' | 'education') => {
     dialog.open();
 };
 
-const confirmDelete = () => {
-    if (!selectedItem.value) {
-        return;
-    }
+const confirmDelete = async () => {
+    if (!selectedItem.value) return;
+
     if (selectedItem.value.type === 'experience') {
-        store.deleteExperience(selectedItem.value.item);
+        await store.deleteExperience(selectedItem.value.item.id);
     } else {
-        store.deleteEducation(selectedItem.value.item);
+        await store.deleteEducation(selectedItem.value.item.id);
     }
+
     dialog.close();
 };
 </script>

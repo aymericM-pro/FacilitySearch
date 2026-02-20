@@ -1,4 +1,5 @@
 export interface Experience {
+    id: string;
     company: string;
     role: string;
     period: string;
@@ -7,6 +8,7 @@ export interface Experience {
 }
 
 export interface Education {
+    id: string;
     school: string;
     degree: string;
     period: string;
@@ -35,7 +37,7 @@ export interface Profile {
     website: string;
 
     about: string;
-    address: Address;
+    address?: Address;
     skills: string[];
 
     experiences: Experience[];

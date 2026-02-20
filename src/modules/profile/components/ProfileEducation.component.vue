@@ -1,33 +1,35 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { useProfileStore } from '@/modules/profile/stores/profile.store.ts';
+import { useProfileStore } from '@/modules/profile/stores/profile.store';
 import ProfileSection from './ProfileSection.component.vue';
 
 const { t } = useI18n();
 const store = useProfileStore();
 
 const emit = defineEmits<{
-    edit: [item: any];
-    create: [];
-    delete: [item: any];
+    edit: [item: any]
+    create: []
+    delete: [item: any]
 }>();
 </script>
 
 <template>
     <ProfileSection
-        :title="t('profile.sections.education')"
+        v-if="store.profile"
         :action-label="t('common.actions.create')"
+        :title="t('profile.sections.education')"
         icon="mdi-school-outline"
         @action="emit('create')"
     >
         <div class="mt-8">
             <div
                 v-for="(edu, index) in store.profile.educations"
-                :key="edu.school + index"
+                :key="edu.id"
             >
                 <div class="flex items-start gap-5 py-6 hover:bg-gray-50 transition rounded-lg px-2">
 
-                    <div class="w-14 h-14 rounded-xl bg-gray-100 flex items-center justify-center border shadow-sm flex-shrink-0">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-gray-100 flex items-center justify-center border shadow-sm flex-shrink-0">
                         <img
                             v-if="edu.logo"
                             :src="edu.logo"

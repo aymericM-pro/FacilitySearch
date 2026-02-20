@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { useProfileStore } from '@/modules/profile/stores/profile.store.ts';
+import { useProfileStore } from '@/modules/profile/stores/profile.store';
 import ProfileSection from './ProfileSection.component.vue';
 
 const { t } = useI18n();
@@ -10,10 +10,11 @@ const emit = defineEmits<{ edit: [] }>();
 
 <template>
     <ProfileSection
-        :title="t('profile.sections.contact')"
+        v-if="store.profile"
         :action-label="t('common.actions.edit')"
-        icon="mdi-account-box-outline"
+        :title="t('profile.sections.contact')"
         class="sticky top-6"
+        icon="mdi-account-box-outline"
         @action="emit('edit')"
     >
         <!-- Email -->
@@ -21,7 +22,10 @@ const emit = defineEmits<{ edit: [] }>();
             <h3 class="sub-title">{{ t('profile.contact.email') }}</h3>
             <div class="mt-4 flex items-center gap-3">
                 <i class="mdi mdi-email-outline text-gray-400 text-lg"></i>
-                <a :href="`mailto:${store.profile.email}`" class="text-indigo-600 font-medium hover:underline">
+                <a
+                    :href="`mailto:${store.profile.email}`"
+                    class="text-indigo-600 font-medium hover:underline"
+                >
                     {{ store.profile.email }}
                 </a>
                 <i class="mdi mdi-star-circle text-yellow-500"></i>
@@ -35,7 +39,10 @@ const emit = defineEmits<{ edit: [] }>();
             <h3 class="sub-title">{{ t('profile.contact.phone') }}</h3>
             <div class="mt-4 flex items-center gap-3">
                 <i class="mdi mdi-phone-outline text-gray-400 text-lg"></i>
-                <a :href="`tel:${store.profile.phone}`" class="font-medium hover:text-indigo-600 transition">
+                <a
+                    :href="`tel:${store.profile.phone}`"
+                    class="font-medium hover:text-indigo-600 transition"
+                >
                     {{ store.profile.phone }}
                 </a>
             </div>
@@ -53,13 +60,21 @@ const emit = defineEmits<{ edit: [] }>();
             <div class="mt-4 space-y-4">
                 <div class="flex items-center gap-3">
                     <i class="mdi mdi-linkedin text-gray-400 text-lg"></i>
-                    <a :href="`https://${store.profile.linkedin}`" class="hover:text-indigo-600 transition" target="_blank">
+                    <a
+                        :href="`https://${store.profile.linkedin}`"
+                        class="hover:text-indigo-600 transition"
+                        target="_blank"
+                    >
                         {{ store.profile.linkedin }}
                     </a>
                 </div>
                 <div class="flex items-center gap-3">
                     <i class="mdi mdi-web text-gray-400 text-lg"></i>
-                    <a :href="`https://${store.profile.website}`" class="hover:text-indigo-600 transition" target="_blank">
+                    <a
+                        :href="`https://${store.profile.website}`"
+                        class="hover:text-indigo-600 transition"
+                        target="_blank"
+                    >
                         {{ store.profile.website }}
                     </a>
                 </div>
@@ -71,7 +86,7 @@ const emit = defineEmits<{ edit: [] }>();
         <!-- Adresse -->
         <div>
             <h3 class="sub-title">{{ t('profile.contact.address') }}</h3>
-            <div class="mt-4 text-sm text-gray-700">
+            <div v-if="store.profile.address" class="mt-4 text-sm text-gray-700">
                 <div class="flex items-center gap-3">
                     <i class="mdi mdi-map-marker-outline text-gray-400 text-lg"></i>
                     {{ store.profile.address.street }},

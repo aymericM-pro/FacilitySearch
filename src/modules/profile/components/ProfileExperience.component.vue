@@ -1,34 +1,36 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { useProfileStore } from '@/modules/profile/stores/profile.store.ts';
+import { useProfileStore } from '@/modules/profile/stores/profile.store';
 import ProfileSection from './ProfileSection.component.vue';
-import type { Experience } from '@/modules/profile/models/experience.model.ts';
+import type { Experience } from '@/modules/profile/models/experience.model';
 
 const { t } = useI18n();
 const store = useProfileStore();
 
 const emit = defineEmits<{
-    edit: [item: Experience];
-    create: [];
-    delete: [item: Experience];
+    edit: [item: Experience]
+    create: []
+    delete: [item: Experience]
 }>();
 </script>
 
 <template>
     <ProfileSection
-        :title="t('profile.sections.experience')"
+        v-if="store.profile"
         :action-label="t('common.actions.create')"
+        :title="t('profile.sections.experience')"
         icon="mdi-briefcase-outline"
         @action="emit('create')"
     >
         <div class="mt-8">
             <div
                 v-for="(exp, index) in store.profile.experiences"
-                :key="exp.company"
+                :key="exp.id"
             >
                 <div class="flex items-start gap-5 py-6 hover:bg-gray-50 transition rounded-lg px-2">
 
-                    <div class="w-14 h-14 rounded-xl bg-gray-100 flex items-center justify-center border shadow-sm flex-shrink-0">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-gray-100 flex items-center justify-center border shadow-sm flex-shrink-0">
                         <img
                             v-if="exp.logo"
                             :src="exp.logo"
