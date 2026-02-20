@@ -1,5 +1,5 @@
 import { reactive } from 'vue';
-import type { Filters } from '@/modules/jobs/models/Filters.model.ts';
+import type { Filters } from '@/modules/jobs/models/Filters.model';
 
 export function useJobFilters() {
     const filters = reactive<Filters>({

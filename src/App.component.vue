@@ -11,7 +11,7 @@ const sidebar = useSidebarStore();
 </script>
 
 <template>
-    <div class="min-h-screen flex bg-slate-50">
+    <div class="h-screen overflow-hidden flex bg-slate-50">
 
         <div class="hidden lg:block">
             <AppSidebar />
@@ -29,7 +29,7 @@ const sidebar = useSidebarStore();
                 </div>
             </Transition>
 
-            <main class="flex-1 px-10 py-8">
+            <main class="flex-1 min-h-0 overflow-y-auto px-10 py-8">
                 <RouterView />
             </main>
             <AppToasts />

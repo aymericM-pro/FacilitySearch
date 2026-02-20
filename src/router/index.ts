@@ -9,6 +9,7 @@ export const AppRoute = {
     COMPANY_DETAIL: 'company-detail',
     LOGIN: 'login',
     REGISTER: 'register',
+    PROFILE: 'profile',
 } as const;
 
 export type AppRouteName = typeof AppRoute[keyof typeof AppRoute];
@@ -56,6 +57,11 @@ const router = createRouter({
             path: '/register',
             name: AppRoute.REGISTER,
             component: () => import('@/modules/auth/features/Register.component.vue'),
+        },
+        {
+            path: '/profile',
+            name: AppRoute.PROFILE,
+            component: () => import('@/modules/profile/Profile.component.vue'),
         },
         {
             path: '/:pathMatch(.*)*',

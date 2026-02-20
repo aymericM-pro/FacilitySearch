@@ -13,13 +13,13 @@ const totalPages = computed(() =>
     Math.ceil(props.totalItems / props.pageSize),
 );
 
-const firstVisiblePage = computed(() =>
-    visiblePages.value.length ? visiblePages.value[0] : 1,
+const firstVisiblePage = computed<number>(() =>
+    visiblePages.value.length ? visiblePages.value[0]! : 1,
 );
 
-const lastVisiblePage = computed(() =>
+const lastVisiblePage = computed<number>(() =>
     visiblePages.value.length
-        ? visiblePages.value[visiblePages.value.length - 1]
+        ? visiblePages.value[visiblePages.value.length - 1]!
         : totalPages.value,
 );
 
@@ -42,7 +42,6 @@ const visiblePages = computed(() => {
 const goToPage = (page: number) => {
     if (page >= 1 && page <= totalPages.value && page !== props.modelValue) {
         emit('update:modelValue', page);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 };
 </script>

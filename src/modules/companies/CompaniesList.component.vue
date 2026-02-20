@@ -18,7 +18,7 @@ const viewMode = ref<'card' | 'list'>('card');
 const filters = ref<CompanyFilters>({
     companyType: [],
     industry: [],
-    city: [],
+    city: null,
 });
 
 const filterConfig = useCompanyFilterConfig();

@@ -5,6 +5,7 @@ import { AppRoute } from '@/router';
 import { useAuth } from '@/core/composables/useAuth.composable.ts';
 import FsHeader from '@/core/design-system/fsHeader.component.vue';
 import FsPopover from '@/core/design-system/fsPopover.component.vue';
+import ProfileModal from '@/core/components/fsProfileModal.component.vue';
 import { useSidebarStore } from '@/core/stores/useSidebarStore.store';
 import { useNotificationStore } from '@/core/stores/useNotificationStore.store';
 
@@ -88,36 +89,13 @@ const handleLogout = (close: () => void) => {
                     </template>
 
                     <template #default="{ close }">
-                        <div class="-m-6 w-72 rounded-xl overflow-hidden">
-
-                            <div class="p-5 flex gap-4 items-center bg-gray-50">
-                                <div
-                                    class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold"
-                                >
-                                    {{ userInitials }}
-                                </div>
-
-                                <div class="min-w-0">
-                                    <p class="font-semibold text-gray-800">
-                                        {{ userName }}
-                                    </p>
-                                    <p class="text-sm text-gray-500 truncate">
-                                        {{ userEmail }}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="h-px bg-gray-200"></div>
-
-                            <button
-                                class="w-full px-5 py-3 text-left flex items-center gap-3 text-red-600 hover:bg-red-50 transition"
-                                @click="handleLogout(close)"
-                            >
-                                <i class="mdi mdi-logout text-lg"></i>
-                                Logout
-                            </button>
-
-                        </div>
+                        <ProfileModal
+                            :user-email="userEmail"
+                            :user-initials="userInitials"
+                            :user-name="userName"
+                            @close="close()"
+                            @logout="handleLogout(close)"
+                        />
                     </template>
                 </FsPopover>
 

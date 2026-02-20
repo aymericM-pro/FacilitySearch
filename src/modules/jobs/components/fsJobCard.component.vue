@@ -20,14 +20,8 @@ const props = defineProps<{
     job: FsJob
 }>();
 
-const emit = defineEmits<(e: 'apply', job: FsJob) => void>();
 const { t } = useI18n();
 const { goToWithParams } = useNavigation();
-
-
-const handleApply = () => {
-    emit('apply', props.job);
-};
 
 
 const goToDetail = () => {
