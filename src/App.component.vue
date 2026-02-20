@@ -13,6 +13,7 @@ const sidebar = useSidebarStore();
 <template>
     <div class="h-screen overflow-hidden flex bg-slate-50">
 
+
         <div class="hidden lg:block">
             <AppSidebar />
         </div>
@@ -36,7 +37,6 @@ const sidebar = useSidebarStore();
         </div>
 
         <AppNotifications />
-
     </div>
 </template>
 
