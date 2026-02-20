@@ -26,12 +26,14 @@ defineProps<{
             <!-- Left -->
             <div class="flex items-start gap-4">
 
-                <img
-                    v-if="logo"
-                    :src="logo"
-                    alt="Logo"
-                    class="w-14 h-14 rounded-xl border"
-                />
+                <slot name="logo">
+                    <img
+                        v-if="logo"
+                        :src="logo"
+                        alt="Logo"
+                        class="w-14 h-14 rounded-xl border"
+                    />
+                </slot>
 
                 <div>
                     <h1 class="text-3xl font-semibold text-slate-800">

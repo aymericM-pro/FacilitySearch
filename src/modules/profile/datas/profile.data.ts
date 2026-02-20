@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
-import type { Experience } from '@/modules/profile/models/experience.model.ts';
+import type { Experience, Profile } from '@/modules/profile/models/experience.model.ts';
 
-export const profile = reactive({
+export const profile = reactive<Profile>({
     name: 'Aymeric Maillot',
     title: 'Software Engineer • Java / Angular',
     location: 'Rueil-Malmaison, France',
