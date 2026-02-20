@@ -33,7 +33,7 @@ const sidebarTitle = computed(() => {
     };
     if (s.type === 'experience') return s.item ? `Modifier – ${s.item.company}` : 'Nouvelle expérience';
     if (s.type === 'education') return s.item ? `Modifier – ${s.item.school}` : 'Nouvelle formation';
-    return map[s.type];
+    return map[s.type] ?? '';
 });
 
 const openEdit = (section: EditSection) => {
@@ -73,7 +73,10 @@ const handleSidebarSave = () => {
     if (!s) return;
 
     if (s.type === 'header') {
-        Object.assign(profile, formData.value);
+        profile.name = formData.value.name;
+        profile.title = formData.value.title;
+        profile.location = formData.value.location;
+        profile.available = formData.value.available;
     } else if (s.type === 'about') {
         profile.about = formData.value.about;
     } else if (s.type === 'skills') {
@@ -81,7 +84,14 @@ const handleSidebarSave = () => {
     } else if (s.type === 'experience') {
         if (s.item) {
             const index = profile.experiences.findIndex((e) => e === s.item);
-            if (index !== -1) Object.assign(profile.experiences[index], formData.value);
+            if (index !== -1) {
+                const exp = profile.experiences[index];
+                exp.company = formData.value.company;
+                exp.role = formData.value.role;
+                exp.period = formData.value.period;
+                exp.location = formData.value.location;
+                exp.logo = formData.value.logo;
+            }
         } else {
             profile.experiences.push(formData.value);
         }
@@ -89,7 +99,15 @@ const handleSidebarSave = () => {
         'education') {
         if (s.item) {
             const index = profile.educations.findIndex((e) => e === s.item);
-            if (index !== -1) Object.assign(profile.educations[index], formData.value);
+            if (index !== -1) {
+                const edu = profile.educations[index];
+                edu.school = formData.value.school;
+                edu.degree = formData.value.degree;
+                edu.period = formData.value.period;
+                edu.location = formData.value.location;
+                edu.field = formData.value.field;
+                edu.logo = formData.value.logo;
+            }
         } else {
             profile.educations.push(formData.value);
         }
