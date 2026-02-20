@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { loginSchema } from '@/modules/auth/schema/auth.schema';
 import { useAuth } from '@/core/composables/useAuth.composable';
 import { useNavigation } from '@/core/composables/navigation.composable';
@@ -7,6 +8,7 @@ import { AppRoute } from '@/router';
 import fsInput from '@/core/design-system/fsInput.component.vue';
 import fsButton from '@/core/design-system/fsButton.component.vue';
 
+const { t } = useI18n();
 const { login } = useAuth();
 const { goTo } = useNavigation();
 
@@ -41,7 +43,7 @@ const submit = async () => {
         goTo(AppRoute.JOBS);
 
     } catch (e: any) {
-        errors.value.global = e.message || 'Login failed';
+        errors.value.global = e.message || t('auth.errors.loginFailed');
     } finally {
         loading.value = false;
     }
@@ -50,23 +52,23 @@ const submit = async () => {
 
 <template>
     <div class="max-w-md mx-auto space-y-6">
-        <h1 class="text-2xl font-semibold">Login</h1>
+        <h1 class="text-2xl font-semibold">{{ t('auth.login') }}</h1>
 
         <form class="space-y-6" @submit.prevent="submit">
 
             <fsInput
                 v-model="form.email"
                 :error="errors.email"
-                label="Email"
-                placeholder="Email"
+                :label="t('auth.fields.email')"
+                :placeholder="t('auth.fields.email')"
                 type="email"
             />
 
             <fsInput
                 v-model="form.password"
                 :error="errors.password"
-                label="Password"
-                placeholder="Password"
+                :label="t('auth.fields.password')"
+                :placeholder="t('auth.fields.password')"
                 type="password"
             />
 
@@ -84,7 +86,7 @@ const submit = async () => {
                 type="submit"
                 variant="primary"
             >
-                {{ loading ? 'Loading...' : 'Login' }}
+                {{ loading ? t('auth.actions.loading') : t('auth.actions.login') }}
             </fsButton>
 
         </form>

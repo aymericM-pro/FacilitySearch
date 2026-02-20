@@ -29,6 +29,10 @@ export const fr = {
             results: '{count} résultats',
             page: 'Page {current} / {total}',
         },
+        viewToggle: {
+            cards: 'Cartes',
+            list: 'Liste',
+        },
     },
 
     navigation: {
@@ -54,6 +58,20 @@ export const fr = {
         login: 'Connexion',
         register: 'Inscription',
         logout: 'Déconnexion',
+        fields: {
+            email: 'Email',
+            password: 'Mot de passe',
+            pseudo: 'Pseudo',
+            confirmPassword: 'Confirmer le mot de passe',
+        },
+        actions: {
+            login: 'Se connecter',
+            register: "S'inscrire",
+            loading: 'Chargement...',
+        },
+        errors: {
+            loginFailed: 'Échec de la connexion',
+        },
     },
 
     home: {
@@ -166,6 +184,104 @@ export const fr = {
             skills: {
                 searchPlaceholder: 'Rechercher des compétences...',
                 noResults: 'Aucun résultat',
+            },
+        },
+    },
+
+    profile: {
+        availability: {
+            available: 'Open to work',
+            unavailable: 'Indisponible',
+        },
+        edit: {
+            header: 'Modifier le profil',
+            about: 'Modifier le résumé',
+            skills: 'Modifier les compétences',
+            experience: 'Modifier – {company}',
+            experienceNew: 'Nouvelle expérience',
+            education: 'Modifier – {school}',
+            educationNew: 'Nouvelle formation',
+            contact: 'Modifier les coordonnées',
+        },
+        delete: {
+            title: 'Confirmer la suppression',
+            confirmText: 'Voulez-vous vraiment supprimer',
+        },
+        sections: {
+            about: 'À propos',
+            skills: 'Compétences',
+            experience: 'Expérience',
+            education: 'Éducation',
+            contact: 'Contact',
+        },
+        about: {
+            summary: 'Résumé du profil :',
+        },
+        contact: {
+            email: 'Adresses email',
+            phone: 'Numéro(s) de téléphone',
+            phonePrivate: 'Champ privé, visible uniquement par vous et les administrateurs.',
+            networks: 'Réseaux & Site',
+            address: 'Adresse(s) postale(s)',
+        },
+        form: {
+            header: {
+                name: 'Nom complet',
+                namePlaceholder: 'Prénom Nom',
+                jobTitle: 'Titre / Poste',
+                jobTitlePlaceholder: 'Ex: Software Engineer',
+                location: 'Localisation',
+                locationPlaceholder: 'Ex: Paris, France',
+                available: 'Disponible',
+            },
+            about: {
+                label: 'Résumé du profil',
+                placeholder: 'Décrivez votre profil...',
+            },
+            skills: {
+                searchPlaceholder: 'Rechercher une compétence...',
+                empty: 'Aucune compétence trouvée',
+            },
+            experience: {
+                company: 'Entreprise',
+                companyPlaceholder: 'Ex: Google',
+                role: 'Poste / Rôle',
+                rolePlaceholder: 'Ex: Software Engineer',
+                period: 'Période',
+                periodPlaceholder: 'Ex: Jan 2023 - Présent',
+                location: 'Lieu',
+                locationPlaceholder: 'Ex: Paris',
+                logo: 'Logo (URL, optionnel)',
+            },
+            education: {
+                school: 'École / Université',
+                schoolPlaceholder: 'Ex: EFREI Paris',
+                degree: 'Diplôme',
+                degreePlaceholder: 'Ex: Ingénieur',
+                period: 'Période',
+                periodPlaceholder: 'Ex: 2018 - 2023',
+                location: 'Lieu',
+                locationPlaceholder: 'Ex: Paris',
+                field: 'Domaine (optionnel)',
+                fieldPlaceholder: 'Ex: Ingénierie logicielle',
+                logo: 'Logo (URL, optionnel)',
+            },
+            contact: {
+                email: 'Email',
+                emailPlaceholder: 'votre@email.com',
+                phone: 'Téléphone',
+                phonePlaceholder: '+33 6 12 34 56 78',
+                linkedin: 'LinkedIn',
+                linkedinPlaceholder: 'linkedin.com/in/profil',
+                website: 'Site web',
+                websitePlaceholder: 'monsite.dev',
+                postalAddress: 'Adresse postale',
+                street: 'Rue',
+                streetPlaceholder: '123 Rue de la République',
+                city: 'Ville',
+                cityPlaceholder: 'Paris',
+                postal: 'Code postal',
+                postalPlaceholder: '75001',
             },
         },
     },

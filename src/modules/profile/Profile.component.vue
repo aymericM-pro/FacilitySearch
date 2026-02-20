@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useProfileStore } from '@/modules/profile/stores/profile.store.ts';
 import { useDialogService } from '@/core/composables/dialog.composable.ts';
 import type { EditSection } from '@/core/composables/editSidebar.composable.ts';
@@ -20,6 +21,7 @@ import EditExperienceForm from '@/modules/profile/components/EditExperienceForm.
 import EditEducationForm from '@/modules/profile/components/EditEducationForm.component.vue';
 import EditContactForm from '@/modules/profile/components/EditContactForm.component.vue';
 
+const { t } = useI18n();
 const store = useProfileStore();
 const dialog = useDialogService();
 const editSidebar = useEditSidebarService();
@@ -27,14 +29,12 @@ const editSidebar = useEditSidebarService();
 const formData = ref<any>(null);
 
 type SectionHandler = {
-    title: string | ((s: EditSection) => string);
     init: (s: EditSection) => any;
     save: (data: any, s: EditSection) => void;
 };
 
 const sectionHandlers: Record<EditSection['type'], SectionHandler> = {
     header: {
-        title: 'Modifier le profil',
         init: () => {
             const p = store.profile;
             return { name: p.name, title: p.title, location: p.location, available: p.available };
@@ -42,19 +42,14 @@ const sectionHandlers: Record<EditSection['type'], SectionHandler> = {
         save: (data) => store.updateHeader(data),
     },
     about: {
-        title: 'Modifier le résumé',
         init: () => ({ about: store.profile.about }),
         save: (data) => store.updateAbout(data.about),
     },
     skills: {
-        title: 'Modifier les compétences',
         init: () => ({ skills: [...store.profile.skills] }),
         save: (data) => store.updateSkills(data.skills),
     },
     experience: {
-        title: (s) => (s as { type: 'experience'; item: any }).item
-            ? `Modifier – ${(s as any).item.company}`
-            : 'Nouvelle expérience',
         init: (s) => {
             const item = (s as { type: 'experience'; item: any }).item;
             return item
@@ -64,9 +59,6 @@ const sectionHandlers: Record<EditSection['type'], SectionHandler> = {
         save: (data, s) => store.saveExperience((s as any).item, data),
     },
     education: {
-        title: (s) => (s as { type: 'education'; item: any }).item
-            ? `Modifier – ${(s as any).item.school}`
-            : 'Nouvelle formation',
         init: (s) => {
             const item = (s as { type: 'education'; item: any }).item;
             return item
@@ -76,7 +68,6 @@ const sectionHandlers: Record<EditSection['type'], SectionHandler> = {
         save: (data, s) => store.saveEducation((s as any).item, data),
     },
     contact: {
-        title: 'Modifier les coordonnées',
         init: () => {
             const p = store.profile;
             return {
@@ -94,8 +85,19 @@ const sectionHandlers: Record<EditSection['type'], SectionHandler> = {
 const sidebarTitle = computed(() => {
     const s = editSidebar.state.section;
     if (!s) return '';
-    const { title } = sectionHandlers[s.type];
-    return typeof title === 'function' ? title(s) : title;
+    switch (s.type) {
+        case 'header': return t('profile.edit.header');
+        case 'about': return t('profile.edit.about');
+        case 'skills': return t('profile.edit.skills');
+        case 'experience': return (s as any).item
+            ? t('profile.edit.experience', { company: (s as any).item.company })
+            : t('profile.edit.experienceNew');
+        case 'education': return (s as any).item
+            ? t('profile.edit.education', { school: (s as any).item.school })
+            : t('profile.edit.educationNew');
+        case 'contact': return t('profile.edit.contact');
+        default: return '';
+    }
 });
 
 const openEdit = (section: EditSection) => {
@@ -162,21 +164,21 @@ const confirmDelete = () => {
         <!-- Delete dialog -->
         <fsDialog>
             <template #title>
-                <h3 class="text-lg font-semibold text-gray-800">Confirmer la suppression</h3>
+                <h3 class="text-lg font-semibold text-gray-800">{{ t('profile.delete.title') }}</h3>
             </template>
 
             <div>
-                Voulez-vous vraiment supprimer
+                {{ t('profile.delete.confirmText') }}
                 <strong>{{ selectedItem?.item?.role || selectedItem?.item?.degree }}</strong> ?
             </div>
 
             <template #actions>
                 <button class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm" @click="dialog.close()">
-                    Annuler
+                    {{ t('common.actions.cancel') }}
                 </button>
                 <button class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm"
                         @click="confirmDelete">
-                    Supprimer
+                    {{ t('common.actions.delete') }}
                 </button>
             </template>
         </fsDialog>
@@ -203,13 +205,13 @@ const confirmDelete = () => {
                         class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 transition"
                         @click="editSidebar.close()"
                     >
-                        Annuler
+                        {{ t('common.actions.cancel') }}
                     </button>
                     <button
                         class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition shadow-sm"
                         @click="handleSidebarSave"
                     >
-                        Enregistrer
+                        {{ t('common.actions.save') }}
                     </button>
                 </div>
             </template>

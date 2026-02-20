@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
 const props = defineProps<{
     modelValue: 'card' | 'list'
 }>();
@@ -26,7 +29,7 @@ const setMode = (mode: 'card' | 'list') => {
             @click="setMode('card')"
         >
             <i class="mdi mdi-view-grid-outline text-base"></i>
-            Cards
+            {{ t('common.viewToggle.cards') }}
         </button>
 
         <!-- LIST -->
@@ -40,7 +43,7 @@ const setMode = (mode: 'card' | 'list') => {
             @click="setMode('list')"
         >
             <i class="mdi mdi-format-list-bulleted text-base"></i>
-            List
+            {{ t('common.viewToggle.list') }}
         </button>
 
     </div>

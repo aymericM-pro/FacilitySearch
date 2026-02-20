@@ -1,13 +1,19 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import { useProfileStore } from '@/modules/profile/stores/profile.store.ts';
 import ProfileSection from './ProfileSection.component.vue';
 
+const { t } = useI18n();
 const store = useProfileStore();
 const emit = defineEmits<{ edit: [] }>();
 </script>
 
 <template>
-    <ProfileSection title="Compétences" action-label="Modifier" @action="emit('edit')">
+    <ProfileSection
+        :title="t('profile.sections.skills')"
+        :action-label="t('common.actions.edit')"
+        @action="emit('edit')"
+    >
         <div class="flex flex-wrap gap-3 mt-6">
             <span
                 v-for="skill in store.profile.skills"

@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import fsInput from '@/core/design-system/fsInput.component.vue';
+
+const { t } = useI18n();
 
 const props = defineProps<{
     modelValue: {
@@ -22,12 +25,24 @@ watch(local, (val) => emit('update:modelValue', val), { deep: true });
 
 <template>
     <div class="space-y-4">
-        <fsInput v-model="local.name" label="Nom complet" placeholder="Prénom Nom" />
-        <fsInput v-model="local.title" label="Titre / Poste" placeholder="Ex: Software Engineer" />
-        <fsInput v-model="local.location" label="Localisation" placeholder="Ex: Paris, France" />
+        <fsInput
+            v-model="local.name"
+            :label="t('profile.form.header.name')"
+            :placeholder="t('profile.form.header.namePlaceholder')"
+        />
+        <fsInput
+            v-model="local.title"
+            :label="t('profile.form.header.jobTitle')"
+            :placeholder="t('profile.form.header.jobTitlePlaceholder')"
+        />
+        <fsInput
+            v-model="local.location"
+            :label="t('profile.form.header.location')"
+            :placeholder="t('profile.form.header.locationPlaceholder')"
+        />
 
         <div class="flex items-center justify-between py-2">
-            <span class="text-sm font-medium text-slate-700">Disponible</span>
+            <span class="text-sm font-medium text-slate-700">{{ t('profile.form.header.available') }}</span>
             <button
                 type="button"
                 class="relative inline-flex h-6 w-11 items-center rounded-full transition"

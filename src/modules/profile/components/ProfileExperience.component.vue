@@ -1,8 +1,10 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import { useProfileStore } from '@/modules/profile/stores/profile.store.ts';
 import ProfileSection from './ProfileSection.component.vue';
 import type { Experience } from '@/modules/profile/models/experience.model.ts';
 
+const { t } = useI18n();
 const store = useProfileStore();
 
 const emit = defineEmits<{
@@ -14,9 +16,9 @@ const emit = defineEmits<{
 
 <template>
     <ProfileSection
-        title="Expérience"
+        :title="t('profile.sections.experience')"
+        :action-label="t('common.actions.create')"
         icon="mdi-briefcase-outline"
-        action-label="Créer"
         @action="emit('create')"
     >
         <div class="mt-8">

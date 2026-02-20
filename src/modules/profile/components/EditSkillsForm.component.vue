@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import fsCheckboxSearch from '@/core/design-system/fsCheckboxSearch.component.vue';
+
+const { t } = useI18n();
 
 const SUGGESTED_SKILLS = [
     'Java', 'Kotlin', 'Spring Boot', 'Spring Security',
@@ -35,8 +38,8 @@ const allItems = computed(() => {
     <fsCheckboxSearch
         :items="allItems"
         :model-value="local.skills"
-        search-placeholder="Rechercher une compétence..."
-        empty-text="Aucune compétence trouvée"
+        :search-placeholder="t('profile.form.skills.searchPlaceholder')"
+        :empty-text="t('profile.form.skills.empty')"
         @update:model-value="local.skills = $event"
     />
 </template>

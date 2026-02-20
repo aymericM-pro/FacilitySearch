@@ -1,13 +1,15 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import fsBar from '@/core/components/fsBar.component.vue';
 import { useProfileStore } from '@/modules/profile/stores/profile.store.ts';
 
+const { t } = useI18n();
 const store = useProfileStore();
 const emit = defineEmits<{ edit: [] }>();
 
 const availabilityLabel = computed(() =>
-    store.profile.available ? 'Open to work' : 'Indisponible',
+    store.profile.available ? t('profile.availability.available') : t('profile.availability.unavailable'),
 );
 </script>
 
@@ -37,7 +39,7 @@ const availabilityLabel = computed(() =>
                 @click="emit('edit')"
             >
                 <i class="mdi mdi-pencil-outline mr-2"></i>
-                Modifier le profil
+                {{ t('profile.edit.header') }}
             </button>
         </template>
     </fsBar>

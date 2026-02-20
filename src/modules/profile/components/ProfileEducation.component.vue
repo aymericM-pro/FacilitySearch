@@ -1,7 +1,9 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import { useProfileStore } from '@/modules/profile/stores/profile.store.ts';
 import ProfileSection from './ProfileSection.component.vue';
 
+const { t } = useI18n();
 const store = useProfileStore();
 
 const emit = defineEmits<{
@@ -13,9 +15,9 @@ const emit = defineEmits<{
 
 <template>
     <ProfileSection
-        title="Éducation"
+        :title="t('profile.sections.education')"
+        :action-label="t('common.actions.create')"
         icon="mdi-school-outline"
-        action-label="Créer"
         @action="emit('create')"
     >
         <div class="mt-8">
@@ -29,7 +31,7 @@ const emit = defineEmits<{
                         <img
                             v-if="edu.logo"
                             :src="edu.logo"
-                            alt="Logo école"
+                            alt="Logo"
                             class="w-8 h-8 object-contain"
                         />
                         <i v-else class="mdi mdi-school text-gray-400 text-2xl"></i>
