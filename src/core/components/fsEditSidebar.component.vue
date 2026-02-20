@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
 defineProps<{
     isOpen: boolean;
     title: string;
@@ -48,13 +52,13 @@ const emit = defineEmits<{
                         class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 transition"
                         @click="emit('close')"
                     >
-                        Annuler
+                        {{ t('common.actions.cancel') }}
                     </button>
                     <button
                         class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition shadow-sm"
                         @click="emit('save')"
                     >
-                        Enregistrer
+                        {{ t('common.actions.save') }}
                     </button>
                 </div>
             </div>
@@ -62,7 +66,7 @@ const emit = defineEmits<{
     </Teleport>
 </template>
 
-<style>
+<style scoped>
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.25s ease;

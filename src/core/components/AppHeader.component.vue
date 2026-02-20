@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { AppRoute } from '@/router';
 import { useAuth } from '@/core/composables/useAuth.composable.ts';
 import FsHeader from '@/core/design-system/fsHeader.component.vue';
@@ -9,6 +10,7 @@ import ProfileModal from '@/core/components/fsProfileModal.component.vue';
 import { useSidebarStore } from '@/core/stores/useSidebarStore.store';
 import { useNotificationStore } from '@/core/stores/useNotificationStore.store';
 
+const { t } = useI18n();
 const router = useRouter();
 const { token, logout, user } = useAuth();
 const sidebar = useSidebarStore();
@@ -48,7 +50,7 @@ const handleLogout = (close: () => void) => {
                 v-if="isAuthenticated"
                 class="hidden lg:block text-2xl font-semibold text-gray-800"
             >
-                Hi, {{ userName }}
+                {{ t('header.greeting', { name: userName }) }}
             </h2>
         </template>
 
@@ -58,7 +60,7 @@ const handleLogout = (close: () => void) => {
                 <div class="relative hidden md:flex">
                     <input
                         class="w-64 rounded-lg border border-gray-200 bg-white px-4 py-2 pr-10 text-sm outline-none transition focus:border-indigo-500"
-                        placeholder="Search..."
+                        :placeholder="t('header.search')"
                         type="text"
                     />
                     <i class="mdi mdi-magnify absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
@@ -108,7 +110,7 @@ const handleLogout = (close: () => void) => {
                            text-gray-700 hover:bg-gray-100 transition"
                     @click="router.push({ name: AppRoute.LOGIN })"
                 >
-                    Login
+                    {{ t('auth.login') }}
                 </button>
 
                 <button
@@ -116,7 +118,7 @@ const handleLogout = (close: () => void) => {
                            hover:bg-indigo-700 transition"
                     @click="router.push({ name: AppRoute.REGISTER })"
                 >
-                    Register
+                    {{ t('auth.register') }}
                 </button>
 
             </template>

@@ -1,5 +1,8 @@
 <script generic="T" lang="ts" setup>
 import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps<{
     modelValue: T
@@ -20,7 +23,6 @@ watch(
     },
 );
 
-// ✅ fonction stable
 function setLocal(v: T) {
     localValue.value = v;
 }
@@ -54,7 +56,7 @@ function reset() {
                 class="text-sm text-slate-500 hover:text-slate-700 transition"
                 @click="reset"
             >
-                Reset
+                {{ t('common.filter.reset') }}
             </button>
 
             <button
@@ -65,7 +67,7 @@ function reset() {
                 class="text-sm px-4 py-2 rounded-lg transition"
                 @click="apply"
             >
-                Apply
+                {{ t('common.filter.apply') }}
             </button>
         </div>
     </div>

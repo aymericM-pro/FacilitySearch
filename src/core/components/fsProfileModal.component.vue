@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { AppRoute } from '@/router';
+
+const { t } = useI18n();
 
 defineProps<{
     userName: string
@@ -42,7 +45,7 @@ const emit = defineEmits<{
             @click="emit('close')"
         >
             <i class="mdi mdi-account-outline text-lg"></i>
-            Profile
+            {{ t('navigation.profile') }}
         </RouterLink>
 
         <div class="h-px bg-gray-200"></div>
@@ -52,7 +55,7 @@ const emit = defineEmits<{
             @click="emit('logout')"
         >
             <i class="mdi mdi-logout text-lg"></i>
-            Logout
+            {{ t('auth.logout') }}
         </button>
 
     </div>

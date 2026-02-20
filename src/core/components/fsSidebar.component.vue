@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { AppRoute } from '@/router';
 import { useNavigation } from '@/core/composables/navigation.composable';
 
 const { goTo } = useNavigation();
+const { t } = useI18n();
 const route = useRoute();
 
 interface MenuItem {
@@ -14,12 +16,12 @@ interface MenuItem {
     route: typeof AppRoute[keyof typeof AppRoute];
 }
 
-const menuItems: MenuItem[] = [
-    { id: 'home', icon: 'mdi-home-outline', label: 'Home', route: AppRoute.HOME },
-    { id: 'jobs', icon: 'mdi-briefcase-outline', label: 'Jobs', route: AppRoute.JOBS },
-    { id: 'trigger', icon: 'mdi-flash-outline', label: 'Trigger', route: AppRoute.TRIGGER },
-    { id: 'companies', icon: 'mdi-domain', label: 'Companies', route: AppRoute.COMPANIES },
-];
+const menuItems = computed<MenuItem[]>(() => [
+    { id: 'home', icon: 'mdi-home-outline', label: t('navigation.home'), route: AppRoute.HOME },
+    { id: 'jobs', icon: 'mdi-briefcase-outline', label: t('navigation.jobs'), route: AppRoute.JOBS },
+    { id: 'trigger', icon: 'mdi-flash-outline', label: t('navigation.trigger'), route: AppRoute.TRIGGER },
+    { id: 'companies', icon: 'mdi-domain', label: t('navigation.companies'), route: AppRoute.COMPANIES },
+]);
 
 const activeRoute = computed(() => route.name);
 

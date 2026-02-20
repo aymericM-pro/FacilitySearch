@@ -7,13 +7,53 @@ export const fr = {
             apply: 'Postuler',
             generateCv: 'Générer un CV',
             back: 'Retour',
+            save: 'Enregistrer',
+            cancel: 'Annuler',
+            close: 'Fermer',
+            delete: 'Supprimer',
+            edit: 'Modifier',
+            create: 'Créer',
+            confirm: 'Confirmer',
+            open: 'Ouvrir',
+        },
+        filter: {
+            apply: 'Appliquer',
+            reset: 'Réinitialiser',
+        },
+        search: {
+            placeholder: 'Rechercher...',
+            noResults: 'Aucun résultat',
+            loading: 'Chargement...',
+        },
+        listing: {
+            results: '{count} résultats',
+            page: 'Page {current} / {total}',
         },
     },
 
     navigation: {
+        title: 'Navigation',
         home: 'Accueil',
+        jobs: 'Offres',
         trigger: 'Déclencher CV',
-        jobs: 'Jobs',
+        companies: 'Entreprises',
+        profile: 'Profil',
+    },
+
+    header: {
+        greeting: 'Bonjour, {name}',
+        search: 'Rechercher...',
+    },
+
+    notifications: {
+        title: 'Notifications',
+        markAllAsRead: 'Tout marquer comme lu',
+    },
+
+    auth: {
+        login: 'Connexion',
+        register: 'Inscription',
+        logout: 'Déconnexion',
     },
 
     home: {

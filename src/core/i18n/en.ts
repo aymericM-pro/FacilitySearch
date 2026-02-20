@@ -4,7 +4,56 @@ export const en = {
             trigger: 'Trigger',
             triggerJob: 'Trigger job',
             goToTrigger: 'Go to trigger page',
+            apply: 'Apply',
+            generateCv: 'Generate CV',
+            back: 'Back',
+            save: 'Save',
+            cancel: 'Cancel',
+            close: 'Close',
+            delete: 'Delete',
+            edit: 'Edit',
+            create: 'Create',
+            confirm: 'Confirm',
+            open: 'Open',
         },
+        filter: {
+            apply: 'Apply',
+            reset: 'Reset',
+        },
+        search: {
+            placeholder: 'Search...',
+            noResults: 'No results',
+            loading: 'Loading...',
+        },
+        listing: {
+            results: '{count} results',
+            page: 'Page {current} / {total}',
+        },
+    },
+
+    navigation: {
+        title: 'Navigation',
+        home: 'Home',
+        jobs: 'Jobs',
+        trigger: 'Trigger CV',
+        companies: 'Companies',
+        profile: 'Profile',
+    },
+
+    header: {
+        greeting: 'Hi, {name}',
+        search: 'Search...',
+    },
+
+    notifications: {
+        title: 'Notifications',
+        markAllAsRead: 'Mark all as read',
+    },
+
+    auth: {
+        login: 'Login',
+        register: 'Register',
+        logout: 'Logout',
     },
 
     home: {

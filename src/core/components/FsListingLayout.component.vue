@@ -3,6 +3,9 @@ import fsBar from '@/core/components/fsBar.component.vue';
 import fsPagination from '@/core/design-system/fsPagination.component.vue';
 import ViewToggle from '@/core/design-system/fsViewToggle.component.vue';
 import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps<{
     title: string
@@ -45,7 +48,7 @@ watch(() => props.modelValue, () => {
                 <input
                     class="px-4 py-2 border border-slate-300 rounded-lg text-sm w-64
                  focus:outline-none focus:ring-2 focus:ring-slate-900"
-                    placeholder="Search..."
+                    :placeholder="t('common.search.placeholder')"
                     @input="emit('search', ($event.target as HTMLInputElement).value)"
                 />
 
@@ -58,8 +61,8 @@ watch(() => props.modelValue, () => {
 
         <!-- Results header -->
         <div class="flex-shrink-0 flex justify-between items-center text-sm text-slate-500">
-            <span>{{ totalItems }} results</span>
-            <span>Page {{ modelValue }} / {{ totalPages }}</span>
+            <span>{{ t('common.listing.results', { count: totalItems }) }}</span>
+            <span>{{ t('common.listing.page', { current: modelValue, total: totalPages }) }}</span>
         </div>
 
         <!-- Error -->
@@ -75,7 +78,7 @@ watch(() => props.modelValue, () => {
             v-if="loading"
             class="flex-shrink-0 text-center py-12 text-slate-500"
         >
-            Loading...
+            {{ t('common.search.loading') }}
         </div>
 
         <!-- Content -->

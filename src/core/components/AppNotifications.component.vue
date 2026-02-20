@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import { useNotificationStore } from '@/core/stores/useNotificationStore.store';
 
+const { t } = useI18n();
 const store = useNotificationStore();
 
 const typeConfig = {
@@ -30,7 +32,7 @@ const typeConfig = {
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
                 <div class="flex items-center gap-3">
-                    <h2 class="text-lg font-semibold text-gray-800">Notifications</h2>
+                    <h2 class="text-lg font-semibold text-gray-800">{{ t('notifications.title') }}</h2>
                     <span
                         v-if="store.unreadCount > 0"
                         class="px-2 py-0.5 rounded-full bg-indigo-600 text-white text-xs font-semibold"
@@ -45,7 +47,7 @@ const typeConfig = {
                         class="text-xs text-indigo-600 hover:text-indigo-800 font-medium transition"
                         @click="store.markAllAsRead()"
                     >
-                        Mark all as read
+                        {{ t('notifications.markAllAsRead') }}
                     </button>
                     <button
                         class="p-2 rounded-lg text-gray-400 hover:bg-gray-100 transition"

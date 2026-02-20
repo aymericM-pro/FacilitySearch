@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import fsLink from '@/core/design-system/fsLink.component.vue';
+
+const { t } = useI18n();
 
 defineProps<{
     title: string
@@ -16,7 +19,7 @@ defineProps<{
         <!-- Back -->
         <div v-if="showBack">
             <fsLink :to="backTo || '/'">
-                ← Back
+                ← {{ t('common.actions.back') }}
             </fsLink>
         </div>
 

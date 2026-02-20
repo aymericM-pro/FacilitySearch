@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { AppRoute } from '@/router';
 import { useNavigation } from '@/core/composables/navigation.composable';
 import { useSidebarStore } from '@/core/stores/useSidebarStore.store';
 
 const { goTo } = useNavigation();
+const { t } = useI18n();
 const route = useRoute();
 const sidebar = useSidebarStore();
 
@@ -16,12 +18,12 @@ interface MenuItem {
     route: typeof AppRoute[keyof typeof AppRoute];
 }
 
-const menuItems: MenuItem[] = [
-    { id: 'home', icon: 'mdi-home-outline', label: 'Home', route: AppRoute.HOME },
-    { id: 'jobs', icon: 'mdi-briefcase-outline', label: 'Jobs', route: AppRoute.JOBS },
-    { id: 'trigger', icon: 'mdi-flash-outline', label: 'Trigger', route: AppRoute.TRIGGER },
-    { id: 'companies', icon: 'mdi-domain', label: 'Companies', route: AppRoute.COMPANIES },
-];
+const menuItems = computed<MenuItem[]>(() => [
+    { id: 'home', icon: 'mdi-home-outline', label: t('navigation.home'), route: AppRoute.HOME },
+    { id: 'jobs', icon: 'mdi-briefcase-outline', label: t('navigation.jobs'), route: AppRoute.JOBS },
+    { id: 'trigger', icon: 'mdi-flash-outline', label: t('navigation.trigger'), route: AppRoute.TRIGGER },
+    { id: 'companies', icon: 'mdi-domain', label: t('navigation.companies'), route: AppRoute.COMPANIES },
+]);
 
 const activeRoute = computed(() => route.name);
 
@@ -40,7 +42,7 @@ const navigate = (routeName: MenuItem['route']) => {
         <div class="relative bg-slate-900 text-white shadow-xl">
             <div class="flex items-center justify-between px-6 py-5 border-b border-white/10">
                 <h2 class="text-lg font-semibold tracking-wide">
-                    Navigation
+                    {{ t('navigation.title') }}
                 </h2>
 
                 <button
