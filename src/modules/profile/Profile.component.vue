@@ -119,9 +119,14 @@ const handleDelete = (item: any, type: 'experience' | 'education') => {
 };
 
 const confirmDelete = () => {
-    if (!selectedItem.value) return;
-    if (selectedItem.value.type === 'experience') store.deleteExperience(selectedItem.value.item);
-    else store.deleteEducation(selectedItem.value.item);
+    if (!selectedItem.value) {
+        return;
+    }
+    if (selectedItem.value.type === 'experience') {
+        store.deleteExperience(selectedItem.value.item);
+    } else {
+        store.deleteEducation(selectedItem.value.item);
+    }
     dialog.close();
 };
 </script>

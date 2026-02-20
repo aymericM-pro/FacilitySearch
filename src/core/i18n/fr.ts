@@ -39,7 +39,7 @@ export const fr = {
     companies: {
         card: {
             createdAt: 'Créée le {date}',
-            viewDetails: 'Voir les détails',
+            viewDetails: 'détails',
         },
         list: {
             title: 'Entreprises',
@@ -78,7 +78,7 @@ export const fr = {
         card: {
             remote: 'Télétravail',
             onSite: 'Présentiel',
-            viewDetails: 'Voir les détails',
+            viewDetails: 'détails',
             apply: 'Postuler',
             salaryFrom: 'À partir de {min}€',
             salaryUpTo: 'Jusqu\'à {max}€',

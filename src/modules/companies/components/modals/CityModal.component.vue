@@ -1,103 +1,40 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import FilterShell from '@/core/components/fsFilterShell.component.vue';
+import fsFilterSelect from '@/core/design-system/fsFilterSelect.component.vue';
 import api from '@/core/axios/axios.ts';
 
 defineProps<{
-    modelValue: string[]
-    close: () => void
+    modelValue: string[];
+    close: () => void;
 }>();
 
 const emit = defineEmits<(e: 'update:modelValue', value: string[]) => void>();
 
 const { t } = useI18n();
-const search = ref('');
-const allCities = ref<string[]>([]);
+const items = ref<string[]>([]);
 const loading = ref(false);
 
 onMounted(async () => {
-    if (allCities.value.length) return;
-
+    if (items.value.length) return;
     loading.value = true;
     try {
         const res = await api.get('/addresses/cities');
-        allCities.value = res.data;
+        items.value = res.data;
     } finally {
         loading.value = false;
     }
 });
-
-const filteredCities = computed(() => {
-    if (!search.value) return allCities.value;
-
-    return allCities.value.filter(city =>
-        city.toLowerCase().includes(search.value.toLowerCase()),
-    );
-});
-
-const toggleCity = (city: string, current: string[]) => {
-    return current.includes(city)
-        ? current.filter(c => c !== city)
-        : [...current, city];
-};
 </script>
 
 <template>
-    <FilterShell
+    <fsFilterSelect
         :close="close"
-        :default-value="[]"
+        :items="items"
+        :loading="loading"
         :model-value="modelValue"
-        @update:modelValue="emit('update:modelValue', $event)"
-    >
-        <template #default="{ localValue, setLocal }">
-
-            <input
-                v-model="search"
-                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg
-               focus:outline-none focus:ring-2 focus:ring-slate-900"
-                :placeholder="t('companies.filters.city.searchPlaceholder')"
-                type="text"
-            />
-
-            <div
-                v-if="loading"
-                class="text-xs text-slate-400 py-2"
-            >
-                {{ t('companies.filters.city.loading') }}
-            </div>
-
-            <div
-                v-else
-                class="max-h-56 overflow-y-auto text-sm"
-            >
-                <label
-                    v-for="city in filteredCities"
-                    :key="city"
-                    class="flex items-center gap-3 w-full px-4 py-3
-                 cursor-pointer transition-colors duration-150
-                 hover:bg-slate-100"
-                >
-                    <input
-                        :checked="localValue.includes(city)"
-                        class="w-4 h-4 accent-slate-900"
-                        type="checkbox"
-                        @change="setLocal(toggleCity(city, localValue))"
-                    />
-
-                    <span class="text-sm font-medium tracking-wide">
-            {{ city }}
-          </span>
-                </label>
-
-                <div
-                    v-if="filteredCities.length === 0"
-                    class="text-xs text-slate-400 px-4 py-2"
-                >
-                    {{ t('companies.filters.city.noResults') }}
-                </div>
-            </div>
-
-        </template>
-    </FilterShell>
+        :search-placeholder="t('companies.filters.city.searchPlaceholder')"
+        :empty-text="t('companies.filters.city.noResults')"
+        @update:model-value="emit('update:modelValue', $event)"
+    />
 </template>

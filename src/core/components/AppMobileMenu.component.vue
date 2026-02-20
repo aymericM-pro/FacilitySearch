@@ -33,17 +33,11 @@ const navigate = (routeName: MenuItem['route']) => {
 
 <template>
     <div class="fixed inset-0 z-50">
-
-        <!-- Backdrop -->
         <div
             class="absolute inset-0 bg-black/40"
             @click="sidebar.close()"
         />
-
-        <!-- Menu -->
         <div class="relative bg-slate-900 text-white shadow-xl">
-
-            <!-- Header -->
             <div class="flex items-center justify-between px-6 py-5 border-b border-white/10">
                 <h2 class="text-lg font-semibold tracking-wide">
                     Navigation
@@ -56,8 +50,6 @@ const navigate = (routeName: MenuItem['route']) => {
                     <i class="mdi mdi-close text-2xl"></i>
                 </button>
             </div>
-
-            <!-- Liens -->
             <nav class="flex flex-col px-6 py-6 gap-2">
                 <button
                     v-for="item in menuItems"
@@ -74,8 +66,6 @@ const navigate = (routeName: MenuItem['route']) => {
           </span>
                 </button>
             </nav>
-
         </div>
-
     </div>
 </template>

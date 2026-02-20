@@ -1,6 +1,16 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
-import fsInput from '@/core/design-system/fsInput.component.vue';
+import { computed, ref, watch } from 'vue';
+import fsCheckboxSearch from '@/core/design-system/fsCheckboxSearch.component.vue';
+
+const SUGGESTED_SKILLS = [
+    'Java', 'Kotlin', 'Spring Boot', 'Spring Security',
+    'Angular', 'Vue.js', 'React', 'TypeScript', 'JavaScript',
+    'Node.js', 'Python', 'Go', 'Rust',
+    'Docker', 'Kubernetes', 'Terraform', 'Ansible',
+    'PostgreSQL', 'MySQL', 'MongoDB', 'Redis',
+    'AWS', 'GCP', 'Azure',
+    'Git', 'CI/CD', 'GraphQL', 'REST API',
+];
 
 const props = defineProps<{
     modelValue: { skills: string[] };
@@ -11,56 +21,22 @@ const emit = defineEmits<{
 }>();
 
 const local = ref<{ skills: string[] }>(JSON.parse(JSON.stringify(props.modelValue)));
-const newSkill = ref('');
 
 watch(local, (val) => emit('update:modelValue', val), { deep: true });
 
-const addSkill = () => {
-    const trimmed = newSkill.value.trim();
-    if (trimmed && !local.value.skills.includes(trimmed)) {
-        local.value.skills.push(trimmed);
-    }
-    newSkill.value = '';
-};
-
-const removeSkill = (index: number) => {
-    local.value.skills.splice(index, 1);
-};
+// Merge suggested list with any custom skills already in the profile
+const allItems = computed(() => {
+    const custom = local.value.skills.filter((s) => !SUGGESTED_SKILLS.includes(s));
+    return [...SUGGESTED_SKILLS, ...custom];
+});
 </script>
 
 <template>
-    <div class="space-y-4">
-        <div class="flex flex-wrap gap-2">
-            <span
-                v-for="(skill, i) in local.skills"
-                :key="skill"
-                class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm bg-gray-100 text-gray-700"
-            >
-                {{ skill }}
-                <button
-                    type="button"
-                    class="text-gray-400 hover:text-red-500 transition ml-1"
-                    @click="removeSkill(i)"
-                >
-                    <i class="mdi mdi-close text-xs"></i>
-                </button>
-            </span>
-        </div>
-
-        <div class="flex gap-2">
-            <fsInput
-                v-model="newSkill"
-                placeholder="Ajouter une compétence"
-                class="flex-1"
-                @keydown.enter.prevent="addSkill"
-            />
-            <button
-                type="button"
-                class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition"
-                @click="addSkill"
-            >
-                Ajouter
-            </button>
-        </div>
-    </div>
+    <fsCheckboxSearch
+        :items="allItems"
+        :model-value="local.skills"
+        search-placeholder="Rechercher une compétence..."
+        empty-text="Aucune compétence trouvée"
+        @update:model-value="local.skills = $event"
+    />
 </template>
