@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 import fsBar from '@/core/components/fsBar.component.vue';
 import fsButton from '@/core/design-system/fsButton.component.vue';
+import fsSidebarPanel from '@/core/components/fsSidebarPanel.component.vue';
 import { agorapulseJob } from '@/modules/job/datas/agorapulse.job';
 
 const job = agorapulseJob;
@@ -176,58 +177,34 @@ const closeSidebar = () => {
     <!-- ==============================
           SIDEBAR CVS
     =============================== -->
-    <div class="fixed inset-0 z-40 pointer-events-none">
-
-        <div
-            v-if="showSidebar"
-            class="absolute inset-0 bg-black/40 pointer-events-auto"
-            @click="closeSidebar"
-        />
-
-        <div
-            :class="showSidebar ? 'translate-x-0' : 'translate-x-full'"
-            class="absolute right-0 top-0 h-full w-[420px] bg-white shadow-2xl border-l
-             transform transition-transform duration-300 ease-in-out pointer-events-auto"
-        >
-            <div class="p-6 border-b flex justify-between items-center">
-                <h2 class="text-lg font-semibold">
-                    {{ t('jobs.detail.sidebar.title') }}
-                </h2>
-
-                <button
-                    class="text-slate-500 hover:text-slate-800"
-                    @click="closeSidebar"
-                >
-                    ✕
-                </button>
+    <fsSidebarPanel
+        :is-open="showSidebar"
+        :title="t('jobs.detail.sidebar.title')"
+        width="w-[420px]"
+        @close="closeSidebar"
+    >
+        <div class="space-y-4">
+            <div v-if="!cvs.length" class="text-slate-500">
+                {{ t('jobs.detail.sidebar.empty') }}
             </div>
 
-            <div class="flex-1 overflow-y-auto p-6 space-y-4">
+            <div
+                v-for="cv in cvs"
+                :key="cv.id"
+                class="p-4 border rounded-xl flex justify-between items-center"
+            >
+                <p class="text-sm font-medium text-slate-800">
+                    {{ cv.createdAt }}
+                </p>
 
-                <div v-if="!cvs.length" class="text-slate-500">
-                    {{ t('jobs.detail.sidebar.empty') }}
-                </div>
-
-                <div
-                    v-for="cv in cvs"
-                    :key="cv.id"
-                    class="p-4 border rounded-xl flex justify-between items-center"
+                <fsButton
+                    size="sm"
+                    variant="secondary"
+                    @click="openPdf(cv.url)"
                 >
-                    <div>
-                        <p class="text-sm font-medium text-slate-800">
-                            {{ cv.createdAt }}
-                        </p>
-                    </div>
-
-                    <fsButton
-                        size="sm"
-                        variant="secondary"
-                        @click="openPdf(cv.url)"
-                    >
-                        {{ t('jobs.detail.sidebar.open') }}
-                    </fsButton>
-                </div>
+                    {{ t('jobs.detail.sidebar.open') }}
+                </fsButton>
             </div>
         </div>
-    </div>
+    </fsSidebarPanel>
 </template>
