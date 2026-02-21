@@ -26,6 +26,7 @@ export interface Address {
 }
 
 export interface Profile {
+    id: string;
     name: string;
     title: string;
     location: string;
@@ -35,7 +36,7 @@ export interface Profile {
     phone: string;
     linkedin: string;
     website: string;
-
+    photoUrl?: string;
     about: string;
     address?: Address;
     skills: string[];
