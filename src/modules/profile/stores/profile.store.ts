@@ -9,7 +9,6 @@ export const useProfileStore = defineStore('profile', () => {
 
     const loadProfile = async (id: string) => {
         const { data: profileData } = await api.get(`/profiles/${id}`);
-
         const { data: experiences } = await api.get(`/experiences/profile/${id}`);
         const { data: educations } = await api.get(`/educations/profile/${id}`);
 
@@ -25,6 +24,18 @@ export const useProfileStore = defineStore('profile', () => {
         profile.value = data;
     };
 
+    const uploadProfilePhoto = async (id: string, formData: FormData) => {
+        const { data } = await api.post(
+            `/profiles/${id}/photo`,
+            formData,
+            { headers: { 'Content-Type': 'multipart/form-data' } },
+        );
+
+        if (profile.value) {
+            profile.value.photoUrl = data.photoUrl;
+        }
+    };
+
     const createExperience = async (payload: any) => {
         const { data } = await api.post('/experiences', payload);
         profile.value?.experiences.push(data);
@@ -35,9 +46,7 @@ export const useProfileStore = defineStore('profile', () => {
 
         if (profile.value) {
             const index = profile.value.experiences.findIndex(e => e.id === id);
-            if (index !== -1) {
-                profile.value.experiences[index] = data;
-            }
+            if (index !== -1) profile.value.experiences[index] = data;
         }
     };
 
@@ -49,7 +58,7 @@ export const useProfileStore = defineStore('profile', () => {
                 profile.value.experiences.filter(e => e.id !== id);
         }
     };
-    
+
     const createEducation = async (payload: any) => {
         const { data } = await api.post('/educations', payload);
         profile.value?.educations.push(data);
@@ -60,9 +69,7 @@ export const useProfileStore = defineStore('profile', () => {
 
         if (profile.value) {
             const index = profile.value.educations.findIndex(e => e.id === id);
-            if (index !== -1) {
-                profile.value.educations[index] = data;
-            }
+            if (index !== -1) profile.value.educations[index] = data;
         }
     };
 
@@ -75,15 +82,25 @@ export const useProfileStore = defineStore('profile', () => {
         }
     };
 
+    const generateCv = async (id: string) => {
+        const response = await api.get(`/profiles/${id}/pdf`, {
+            responseType: 'blob',
+        });
+
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+    };
+
     return {
         profile,
         loadProfile,
         updateHeader,
-
+        uploadProfilePhoto,
+        generateCv,
         createExperience,
         updateExperience,
         deleteExperience,
-
         createEducation,
         updateEducation,
         deleteEducation,

@@ -26,15 +26,20 @@ const triggerUpload = () => {
 
 const onFileSelected = async (event: Event) => {
     const target = event.target as HTMLInputElement;
-    if (!target.files || !target.files.length) return;
 
-    const file = target.files[0];
+    const file = target.files?.[0];
+    
+    if (!file) {
+        return;
+    }
 
     const formData = new FormData();
     formData.append('file', file);
 
     await store.uploadProfilePhoto(store.profile!.id, formData);
 };
+
+
 </script>
 
 <template>

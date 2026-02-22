@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import axios from 'axios';
-import { useUserStore } from '@/core/composables/user.store';
-
-const userStore = useUserStore();
+import api from '@/core/axios/axios.ts';
 
 const jobTitle = ref('');
 const description = ref('');
@@ -19,16 +16,11 @@ const generatePreview = async () => {
     loading.value = true;
 
     try {
-        const { data } = await axios.post(
-            'http://localhost:8080/api/ai/target-line',
+        const { data } = await api.post(
+            '/ai/target-line',
             {
                 jobTitle: jobTitle.value,
                 description: description.value,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${userStore.token}`,
-                },
             },
         );
 
@@ -46,16 +38,11 @@ const confirmGeneration = async () => {
     generating.value = true;
 
     try {
-        await axios.post(
-            'http://localhost:8080/api/curriculum/trigger',
+        await api.post(
+            '/curriculum/trigger',
             {
                 jobTitle: jobTitle.value,
                 targetLine: previewText.value,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${userStore.token}`,
-                },
             },
         );
 

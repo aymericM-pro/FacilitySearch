@@ -1,4 +1,3 @@
-// useCompanyJobOffers.composable.ts
 import { ref } from 'vue';
 import api from '@/core/axios/axios';
 

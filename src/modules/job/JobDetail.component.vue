@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
+import { useLocalStorage } from '@/core/composables/localStorage.composable.ts';
 import fsBar from '@/core/components/fsBar.component.vue';
 import fsButton from '@/core/design-system/fsButton.component.vue';
 import fsSidebarPanel from '@/core/components/fsSidebarPanel.component.vue';
@@ -19,7 +20,8 @@ const showModal = ref(false);
 
 const cvs = ref<any[]>([]);
 
-const token = localStorage.getItem('token');
+const { getItem } = useLocalStorage();
+const token = getItem('token');
 
 const loadUserCvsForOffer = async () => {
     loading.value = true;

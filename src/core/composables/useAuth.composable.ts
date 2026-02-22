@@ -1,7 +1,10 @@
 import { ref } from 'vue';
 import api from '@/core/axios/axios.ts';
+import { useLocalStorage } from '@/core/composables/localStorage.composable.ts';
 
-const token = ref<string | null>(localStorage.getItem('token'));
+const { getItem, setItem, removeItem } = useLocalStorage();
+
+const token = ref<string | null>(getItem('token'));
 
 const user = ref<{
     name: string;
@@ -14,7 +17,7 @@ export function useAuth() {
         const { data } = await api.post('/auth/login', payload);
 
         token.value = data.accessToken;
-        localStorage.setItem('token', data.accessToken);
+        setItem('token', data.accessToken);
 
         user.value = {
             name: 'User',
@@ -26,7 +29,7 @@ export function useAuth() {
         const { data } = await api.post('/auth/register', payload);
 
         token.value = data.accessToken;
-        localStorage.setItem('token', data.accessToken);
+        setItem('token', data.accessToken);
 
         user.value = {
             name: payload.pseudo,
@@ -39,7 +42,7 @@ export function useAuth() {
     const logout = () => {
         token.value = null;
         user.value = null;
-        localStorage.removeItem('token');
+        removeItem('token');
     };
 
     return {

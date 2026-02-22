@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { useLocalStorage } from '@/core/composables/localStorage.composable.ts';
+
+const { getItem, removeItem } = useLocalStorage();
 
 const api = axios.create({
     baseURL: 'http://localhost:8080/api',
@@ -6,7 +9,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(config => {
-    const token = localStorage.getItem('token');
+    const token = getItem('token');
 
     const isAuthRoute = config.url?.startsWith('/auth');
 
@@ -21,7 +24,7 @@ api.interceptors.response.use(
     response => response,
     error => {
         if (error.response?.status === 401) {
-            localStorage.removeItem('token');
+            removeItem('token');
             window.location.href = '/login';
         }
 
