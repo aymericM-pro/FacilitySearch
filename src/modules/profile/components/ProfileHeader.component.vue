@@ -28,7 +28,7 @@ const onFileSelected = async (event: Event) => {
     const target = event.target as HTMLInputElement;
 
     const file = target.files?.[0];
-    
+
     if (!file) {
         return;
     }
@@ -56,6 +56,7 @@ const onFileSelected = async (event: Event) => {
                 <img
                     v-if="store.profile.photoUrl"
                     :src="store.profile.photoUrl"
+                    alt="Profile Photo"
                     class="w-full h-full object-cover"
                 />
                 <span v-else class="text-indigo-600">
